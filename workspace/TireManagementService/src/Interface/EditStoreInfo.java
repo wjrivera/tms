@@ -1,6 +1,7 @@
 //This Class is to edit the Store Information
 //It needs access to the database
 //Please modify as soon as possible
+//This is a message from Eclipse
 package Interface;
 
 import java.awt.BorderLayout;
