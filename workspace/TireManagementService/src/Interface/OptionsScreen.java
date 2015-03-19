@@ -130,14 +130,26 @@ public class OptionsScreen extends JFrame {
 	}
 
 	public void editStoreInfo() {
+		// close the current window()
+		EditStoreInfo editStoreInfo = new EditStoreInfo();
+		setVisible(false);
+		dispose();
 
 	}
 
-	public void editCurrency() {
+	public void editCurrency() {		
+		// close the current window()
+		EditCurrency editCurrency = new EditCurrency();
+		setVisible(false);
+		dispose();
 
 	}
 
 	public void setPaymentInfo() {
+		// close the current window()
+		SetPaymentInfo setPaymentInfo = new SetPaymentInfo();
+		setVisible(false);
+		dispose();
 
 	}
 
