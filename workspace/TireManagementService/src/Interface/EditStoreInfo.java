@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,113 +17,157 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.*;
 
 public class EditStoreInfo extends JFrame {
 
 	private static final String TITLE = "Edit Store Information";
 
-	JButton backToMainButton, editStoreButton, editCurrencyButton,
-			setPaymentButton, addInventoryButton;
+	JButton backToMainButton, applyButton;
 
 	public EditStoreInfo() {
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		GridLayout gridLayout = new GridLayout(0, 4);
 
-		// set up the buttons
+		// set up the panels
 		JPanel buttonsPanel = new JPanel();
+		JPanel titleAndButtonCont = new JPanel();
+		JPanel topContainer = new JPanel();
+		JPanel botButtonsPanel = new JPanel();
+		JPanel topLevelCont = new JPanel();
+		JPanel panel = new JPanel(gridLayout);
+		
+		
+		
+
+		
+		
+		
+		
+		
+		
+//		buttonsPanel.setBackground(new Color(240, 250, 240));
+//		titleAndButtonCont.setBackground(new Color(0, 250, 240));
+//		topContainer.setBackground(new Color(240, 0, 240));
+//		botButtonsPanel.setBackground(new Color(240, 250, 0));
+//		topLevelCont.setBackground(new Color(0, 255, 0));
+
+		
+		// set the layouts
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
-
+		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
+		topContainer.setLayout(new BorderLayout());
+		botButtonsPanel.setLayout(new GridLayout(2, 2, 15, 15));
+		topLevelCont.setLayout(new GridLayout(2, 1));
+		
+		
+		// set the buttons and labels
 		backToMainButton = new JButton("Back To Main Screen");
+		applyButton = new JButton("Apply In");
+		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
+		titleLabel.setFont(new Font("Serif", Font.BOLD, 35));		
+		JLabel companyLabel = new JLabel("     Company Name: ");
+		JTextField companyTextField = new JTextField();
+		JLabel addressLabel = new JLabel("     Address: ");
+		JTextField addressTextField = new JTextField();
+		JLabel cityLabel = new JLabel("     City: ");
+		JTextField cityTextField = new JTextField();
+		JLabel stateLabel = new JLabel("     State: ");
+		JTextField stateTextField = new JTextField();
+		JLabel zipLabel = new JLabel("     Zip Code: ");
+		JTextField zipTextField = new JTextField();
+		JLabel phoneLabel = new JLabel("     Phone Number: ");
+		JTextField phoneTextField = new JTextField();
+		JLabel faxLabel = new JLabel("     Fax Number: ");
+		JTextField faxTextField = new JTextField();
+		JLabel emailLabel = new JLabel("     Email Address: ");
+		JTextField emailTextField = new JTextField();
+		JLabel countyLabel = new JLabel("     County: ");
+		JTextField countyTextField = new JTextField();
+		JLabel taxLabel = new JLabel("     Tax ID#: ");
+		JTextField taxTextField = new JTextField();
 
+		
+//		JLabel phoneLabel = new JLabel("Phone Number: ");
+//		JTextField phoneTextField = new JTextField();
+//		JLabel emailLabel = new JLabel("Email Address: ");
+//		JTextField emailTextField = new JTextField();
+
+		
+
+
+		// adding the listeners
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				backToMain();
 			}
 		});
+		
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				options();
+			}
 
-		buttonsPanel.add(new JPanel());
-		buttonsPanel.add(backToMainButton);
-		buttonsPanel.add(new JPanel());
+		});		
+		
+		// Add buttons and labels to panels
+		panel.add(companyLabel,BorderLayout.WEST);
+		panel.add(companyTextField,BorderLayout.CENTER);
+		panel.add(phoneLabel,BorderLayout.WEST);
+		panel.add(phoneTextField,BorderLayout.EAST);
+		
+		panel.add(addressLabel,BorderLayout.WEST);
+		panel.add(addressTextField,BorderLayout.EAST);
+		panel.add(faxLabel,BorderLayout.WEST);
+		panel.add(faxTextField,BorderLayout.EAST);
+		
+		
+		panel.add(cityLabel,BorderLayout.WEST);
+		panel.add(cityTextField,BorderLayout.EAST);
+		panel.add(emailLabel,BorderLayout.WEST);
+		panel.add(emailTextField,BorderLayout.EAST);
+		
+		panel.add(stateLabel,BorderLayout.WEST);
+		panel.add(stateTextField,BorderLayout.EAST);
+		panel.add(countyLabel,BorderLayout.WEST);
+		panel.add(countyTextField,BorderLayout.EAST);
+		
+		panel.add(zipLabel,BorderLayout.WEST);
+		panel.add(zipTextField,BorderLayout.CENTER);
 
-		// set up the title
-		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Serif", Font.BOLD, 35));
 
-		// container for title and buttons
-		JPanel titleAndButtonCont = new JPanel();
-		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
-		titleAndButtonCont.add(titleLabel);
-		titleAndButtonCont.add(buttonsPanel);
 
-		// borderlayout to organize top half
-		JPanel topContainer = new JPanel();
-		topContainer.setLayout(new BorderLayout());
 
-		// fillers
+		panel.add(taxLabel,BorderLayout.WEST);
+		panel.add(taxTextField,BorderLayout.EAST);
+		titleAndButtonCont.add(titleLabel);			//adding title label to top panel
+		titleAndButtonCont.add(buttonsPanel);		//adding buttonsPanel to top panel		
+		buttonsPanel.add(new JPanel());				//left side of button
+		buttonsPanel.add(backToMainButton);			//adding button to buttons panel
+		buttonsPanel.add(new JPanel());				//right side of button
+		
+
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_START);
 		topContainer.add(new JLabel("      "), BorderLayout.LINE_START);
 		topContainer.add(new JLabel("      "), BorderLayout.LINE_END);
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_END);
-		// actual one
 		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
-
-		// Bottom Panel with Buttons
-		JPanel botButtonsPanel = new JPanel();
-		botButtonsPanel.setLayout(new GridLayout(2, 2, 15, 15));
-
-		editStoreButton = new JButton("Edit Store Info");
-		editCurrencyButton = new JButton("Edit Currency");
-		setPaymentButton = new JButton("Set Payment Info");
-		addInventoryButton = new JButton("Add Inventory");
-
-		// adding the listeners
-		editStoreButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				editStoreInfo();
-			}
-
-		});
-		editCurrencyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				editCurrency();
-			}
-
-		});
-		setPaymentButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				setPaymentInfo();
-			}
-
-		});
-		addInventoryButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				addInventory();
-			}
-
-		});
-
-		botButtonsPanel.add(editStoreButton);
-		botButtonsPanel.add(editCurrencyButton);
-		botButtonsPanel.add(setPaymentButton);
-		botButtonsPanel.add(addInventoryButton);
-
-		// gridLayout for screen
-		JPanel topLevelCont = new JPanel();
-		topLevelCont.setLayout(new GridLayout(2, 1));
-
+		
+		botButtonsPanel.add(panel);
+		botButtonsPanel.add(applyButton, BorderLayout.SOUTH);
+		
+		//Adding the top container and bottom container
 		topLevelCont.add(topContainer);
 		topLevelCont.add(botButtonsPanel);
-
 		add(topLevelCont);
 
+		//Setting the main panel
 		setResizable(false);
-		setLocationRelativeTo(null);
 		setSize(700, 450);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
@@ -133,24 +178,11 @@ public class EditStoreInfo extends JFrame {
 		dispose();
 	}
 
-	public void editStoreInfo() {
-		// close the current window()
-		//EditStoreInfo editStoreInfo = new EditStoreInfo();
+	public void options() {
+		OptionsScreen newInstance = new OptionsScreen();
 		setVisible(false);
 		dispose();
-
 	}
 
-	public void editCurrency() {
-
-	}
-
-	public void setPaymentInfo() {
-
-	}
-
-	public void addInventory() {
-
-	}
 }
 
