@@ -1,3 +1,5 @@
+//This Class is to edit the Store Information
+//It needs access to the database
 package Interface;
 
 import java.awt.BorderLayout;
