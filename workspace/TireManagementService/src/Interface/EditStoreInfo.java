@@ -64,7 +64,7 @@ public class EditStoreInfo extends JFrame {
 		
 		// set the buttons and labels
 		backToMainButton = new JButton("Back To Main Screen");
-		applyButton = new JButton("Apply In");
+		applyButton = new JButton("Apply Information");
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
 		titleLabel.setFont(new Font("Serif", Font.BOLD, 35));		
 		JLabel companyLabel = new JLabel("     Company Name: ");
