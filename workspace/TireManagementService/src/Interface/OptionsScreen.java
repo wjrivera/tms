@@ -154,6 +154,10 @@ public class OptionsScreen extends JFrame {
 	}
 
 	public void addInventory() {
+		// close the current window()
+		AddInventory addInventory = new AddInventory();
+		setVisible(false);
+		dispose();
 
 	}
 }
