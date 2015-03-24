@@ -31,6 +31,7 @@ public class StartScreen extends JFrame {
 	JRadioButtonMenuItem rbMenuItem;
 	JCheckBoxMenuItem cbMenuItem;
 
+	//hello
 	JPanel screenLayout;
 	JPanel buttonsLayout;
 	JPanel centerPanel;
