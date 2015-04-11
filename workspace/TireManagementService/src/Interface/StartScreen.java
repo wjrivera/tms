@@ -58,7 +58,6 @@ public class StartScreen extends JFrame {
 		searchFieldPanel.setBackground(new Color(129, 159, 252));
 		
 		searchFieldPanel.setLayout(new FlowLayout());
-		searchField = new JTextField();
 		searchField = new JTextField(
 				"Search here                                                                      ");
 		
@@ -75,14 +74,10 @@ public class StartScreen extends JFrame {
 
 		JPanel holder = new JPanel();
 		holder.setLayout(new BorderLayout());
-		//holder.setBackground(new Color(59, 89, 182));
 		holder.setBackground(new Color(129, 159, 252));
 
 		searchFieldPanel.add(searchField);
 		holder.add(searchFieldPanel, BorderLayout.PAGE_END);
-		
-		
-		
 		
 		ImageIcon logoIcon = new ImageIcon("logo.png");	
 		Image image = logoIcon.getImage();
@@ -92,12 +87,7 @@ public class StartScreen extends JFrame {
 		JLabel logo = new JLabel(newLogo);
 		logo.setPreferredSize(new Dimension(650, 500));
 		
-		//holder.add(titleLabel, BorderLayout.CENTER);
 		holder.add(logo);
-		
-		
-		
-
 
 		centerPanel.add(holder);
 

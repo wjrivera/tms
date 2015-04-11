@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -27,9 +28,13 @@ public class GenerateInvoiceScreen extends JFrame {
 		
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(new Color(129, 159, 252));
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		backToMainButton.setForeground(Color.WHITE);
+		backToMainButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 30));
 
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
@@ -38,22 +43,28 @@ public class GenerateInvoiceScreen extends JFrame {
 			}
 		});
 
-		buttonsPanel.add(new JPanel());
+		JPanel empty1 = new JPanel();
+		JPanel empty2 = new JPanel();
+		empty1.setBackground(new Color(129, 159, 252));
+		empty2.setBackground(new Color(129, 159, 252));
+		buttonsPanel.add(empty1);
 		buttonsPanel.add(backToMainButton);
-		buttonsPanel.add(new JPanel());
+		buttonsPanel.add(empty2);
 
 		// set up the title
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
+		titleLabel.setFont(new Font("Comic Sans MS Bold", Font.BOLD, 85));
 
 		// container for title and buttons
 		JPanel titleAndButtonCont = new JPanel();
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
 		titleAndButtonCont.add(titleLabel);
 		titleAndButtonCont.add(buttonsPanel);
 
 		// borderlayout to organize top half
 		JPanel topContainer = new JPanel();
+		topContainer.setBackground(new Color(129, 159, 252));
 		topContainer.setLayout(new BorderLayout());
 
 		// fillers
@@ -66,12 +77,14 @@ public class GenerateInvoiceScreen extends JFrame {
 
 		// ScrollBar
 		JPanel invoiceContainer = new JPanel();
+		invoiceContainer.setBackground(new Color(129, 159, 252));
 		invoice = new JScrollPane(invoiceContainer,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
+		topLevelCont.setBackground(new Color(129, 159, 252));
 		topLevelCont.setLayout(new GridLayout(2, 1));
 
 		topLevelCont.add(topContainer);

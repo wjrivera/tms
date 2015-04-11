@@ -5,18 +5,13 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import javax.swing.*;
 
 public class EditCurrency extends JFrame {
@@ -38,6 +33,13 @@ public class EditCurrency extends JFrame {
 		JPanel topLevelCont = new JPanel();
 		JPanel panel = new JPanel(gridLayout);
 		
+		buttonsPanel.setBackground(new Color(129, 159, 252));
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
+		topContainer.setBackground(new Color(129, 159, 252));
+		botButtonsPanel.setBackground(new Color(129, 159, 252));
+		topLevelCont.setBackground(new Color(129, 159, 252));
+		panel.setBackground(new Color(129, 159, 252));
+		
 		// set the layouts
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
@@ -48,9 +50,17 @@ public class EditCurrency extends JFrame {
 		
 		// set the buttons and labels
 		backToMainButton = new JButton("Back To Main Screen");
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		backToMainButton.setForeground(Color.WHITE);
+		backToMainButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 30));
+		
 		applyButton = new JButton("Apply Information");
+		applyButton.setBackground(new Color(59, 89, 182));
+		applyButton.setForeground(Color.WHITE);
+		applyButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 30));
+		
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Serif", Font.BOLD, 35));		
+		titleLabel.setFont(new Font("Comic Sans MS Bold", Font.BOLD, 85));	
 //		JLabel companyLabel = new JLabel("     Company Name: ");
 //		JTextField companyTextField = new JTextField();
 //		JLabel addressLabel = new JLabel("     Address: ");
@@ -73,17 +83,29 @@ public class EditCurrency extends JFrame {
 //		JTextField taxTextField = new JTextField();
 		
 		JRadioButton usd = new JRadioButton("   USD");
+		usd.setBackground(new Color(129, 159, 252));
 		JRadioButton chf = new JRadioButton("   CHF");
+		chf.setBackground(new Color(129, 159, 252));
 		JRadioButton zar = new JRadioButton("   ZAR");
+		zar.setBackground(new Color(129, 159, 252));
 		JRadioButton eur = new JRadioButton("   EUR");
+		eur.setBackground(new Color(129, 159, 252));
 		JRadioButton cad = new JRadioButton("   CAD");
+		cad.setBackground(new Color(129, 159, 252));
 		JRadioButton hkd = new JRadioButton("   HKD");
+		hkd.setBackground(new Color(129, 159, 252));
 		JRadioButton jpy = new JRadioButton("   JPY");
+		jpy.setBackground(new Color(129, 159, 252));
 		JRadioButton aud = new JRadioButton("   AUD");
+		aud.setBackground(new Color(129, 159, 252));
 		JRadioButton inr = new JRadioButton("   INR");
+		inr.setBackground(new Color(129, 159, 252));
 		JRadioButton gbp = new JRadioButton("   GBP");
+		gbp.setBackground(new Color(129, 159, 252));
 		JRadioButton nzd = new JRadioButton("   NZD");
+		nzd.setBackground(new Color(129, 159, 252));
 		JRadioButton twd = new JRadioButton("   TWD");
+		twd.setBackground(new Color(129, 159, 252));
 
 		usd.setHorizontalAlignment(AbstractButton.CENTER);
 		chf.setHorizontalAlignment(AbstractButton.CENTER);
@@ -159,9 +181,13 @@ public class EditCurrency extends JFrame {
 		//panel.add(buttonGroup);
 		titleAndButtonCont.add(titleLabel);			//adding title label to top panel
 		titleAndButtonCont.add(buttonsPanel);		//adding buttonsPanel to top panel		
-		buttonsPanel.add(new JPanel());				//left side of button
-		buttonsPanel.add(backToMainButton);			//adding button to buttons panel
-		buttonsPanel.add(new JPanel());				//right side of button
+		JPanel empty1 = new JPanel();
+		JPanel empty2 = new JPanel();
+		empty1.setBackground(new Color(129, 159, 252));
+		empty2.setBackground(new Color(129, 159, 252));
+		buttonsPanel.add(empty1);
+		buttonsPanel.add(backToMainButton);
+		buttonsPanel.add(empty2);
 		
 
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_START);

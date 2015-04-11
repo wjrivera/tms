@@ -5,18 +5,13 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import javax.swing.*;
 
 public class AddInventory extends JFrame {
@@ -38,6 +33,13 @@ public class AddInventory extends JFrame {
 		JPanel topLevelCont = new JPanel();
 		JPanel panel = new JPanel(gridLayout);
 		
+		buttonsPanel.setBackground(new Color(129, 159, 252));
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
+		topContainer.setBackground(new Color(129, 159, 252));
+		botButtonsPanel.setBackground(new Color(129, 159, 252));
+		topLevelCont.setBackground(new Color(129, 159, 252));
+		panel.setBackground(new Color(129, 159, 252));
+		
 		// set the layouts
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
@@ -48,29 +50,76 @@ public class AddInventory extends JFrame {
 		
 		// set the buttons and labels
 		backToMainButton = new JButton("Back To Main Screen");
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		backToMainButton.setForeground(Color.WHITE);
+		backToMainButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 30));
+		
 		applyButton = new JButton("Apply Information");
+		applyButton.setBackground(new Color(59, 89, 182));
+		applyButton.setForeground(Color.WHITE);
+		applyButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 30));
+		
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Serif", Font.BOLD, 35));
+		titleLabel.setFont(new Font("Comic Sans MS Bold", Font.BOLD, 85));
 		
 		JLabel manufacturerLabel = new JLabel("     Manufacturer: ");
+		manufacturerLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		manufacturerLabel.setBackground(new Color(59, 89, 182));
+		manufacturerLabel.setForeground(Color.BLACK);
 		JTextField manufacturerTextField = new JTextField();
+		
 		JLabel partNumberLabel = new JLabel("     Part Number: ");
+		partNumberLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		partNumberLabel.setBackground(new Color(59, 89, 182));
+		partNumberLabel.setForeground(Color.BLACK);
 		JTextField partNumberTextField = new JTextField();
+		
 		JLabel tireTypeLabel = new JLabel("     Tire Type: ");
+		tireTypeLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		tireTypeLabel.setBackground(new Color(59, 89, 182));
+		tireTypeLabel.setForeground(Color.BLACK);
 		JTextField tireTypeTextField = new JTextField();
+		
 		JLabel tireWidthLabel = new JLabel("     Tire Width: ");
+		tireWidthLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		tireWidthLabel.setBackground(new Color(59, 89, 182));
+		tireWidthLabel.setForeground(Color.BLACK);
 		JTextField tireWidthTextField = new JTextField();
+		
 		JLabel aspectLabel = new JLabel("     Aspect Ratio: ");
+		aspectLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		aspectLabel.setBackground(new Color(59, 89, 182));
+		aspectLabel.setForeground(Color.BLACK);
 		JTextField aspecTextField = new JTextField();
+		
 		JLabel constructionLabel = new JLabel("     Construction: ");
+		constructionLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		constructionLabel.setBackground(new Color(59, 89, 182));
+		constructionLabel.setForeground(Color.BLACK);
 		JTextField constructionTextField = new JTextField();
+		
 		JLabel diameterLabel = new JLabel("     Wheel Diameter: ");
+		diameterLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		diameterLabel.setBackground(new Color(59, 89, 182));
+		diameterLabel.setForeground(Color.BLACK);
 		JTextField diameterTextField = new JTextField();
+		
 		JLabel speedLabel = new JLabel("     Speed Rating: ");
+		speedLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		speedLabel.setBackground(new Color(59, 89, 182));
+		speedLabel.setForeground(Color.BLACK);
 		JTextField speedTextField = new JTextField();
+		
 		JLabel costabel = new JLabel("     Cost Price: ");
+		costabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		costabel.setBackground(new Color(59, 89, 182));
+		costabel.setForeground(Color.BLACK);
 		JTextField costTextField = new JTextField();
+		
 		JLabel saleLabel = new JLabel("     Sale Price: ");
+		saleLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 20));
+		saleLabel.setBackground(new Color(59, 89, 182));
+		saleLabel.setForeground(Color.BLACK);
 		JTextField saleTextField = new JTextField();
 
 		// adding the listeners
@@ -114,9 +163,13 @@ public class AddInventory extends JFrame {
 		
 		titleAndButtonCont.add(titleLabel);			//adding title label to top panel
 		titleAndButtonCont.add(buttonsPanel);		//adding buttonsPanel to top panel		
-		buttonsPanel.add(new JPanel());				//left side of button
-		buttonsPanel.add(backToMainButton);			//adding button to buttons panel
-		buttonsPanel.add(new JPanel());				//right side of button
+		JPanel empty1 = new JPanel();
+		JPanel empty2 = new JPanel();
+		empty1.setBackground(new Color(129, 159, 252));
+		empty2.setBackground(new Color(129, 159, 252));
+		buttonsPanel.add(empty1);
+		buttonsPanel.add(backToMainButton);
+		buttonsPanel.add(empty2);
 		
 
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_START);
