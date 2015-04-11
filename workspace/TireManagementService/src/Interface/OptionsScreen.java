@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,7 +34,12 @@ public class OptionsScreen extends JFrame {
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				backToMain();
+				try {
+					backToMain();
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -116,13 +122,14 @@ public class OptionsScreen extends JFrame {
 
 		add(topLevelCont);
 
+		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setSize(700, 450);
 		setVisible(true);
 	}
 
-	public void backToMain() {
+	public void backToMain() throws ClassNotFoundException, SQLException {
 		// close the current window()
 		StartScreen back = new StartScreen();
 		setVisible(false);

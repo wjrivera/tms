@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -42,7 +43,9 @@ public class StartScreen extends JFrame {
 	JButton searchByDateButton, searchByCustomerButton, optionsButton,
 			generateInvoiceButton;
 
-	public StartScreen() {
+	public StartScreen() throws ClassNotFoundException, SQLException {
+
+		DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		screenLayout = new JPanel();
@@ -120,6 +123,7 @@ public class StartScreen extends JFrame {
 
 		this.add(screenLayout);
 
+		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setSize(700, 450);
@@ -134,7 +138,12 @@ public class StartScreen extends JFrame {
 	}
 
 	public void searchByCustomer(String cust) {
-		CustomerSearchScreen newInstance = new CustomerSearchScreen();
+		try {
+			CustomerSearchScreen newInstance = new CustomerSearchScreen();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setVisible(false);
 		dispose();
 	}
@@ -151,8 +160,11 @@ public class StartScreen extends JFrame {
 		dispose();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException,
+			SQLException {
+
 		StartScreen start = new StartScreen();
+
 	}
 
 }

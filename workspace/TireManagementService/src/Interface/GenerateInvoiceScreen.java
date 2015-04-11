@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -79,6 +80,7 @@ public class GenerateInvoiceScreen extends JFrame {
 
 		add(topLevelCont);
 
+		pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setSize(700, 450);
@@ -87,7 +89,12 @@ public class GenerateInvoiceScreen extends JFrame {
 
 	public void backToMain() {
 		// close the current window()
-		StartScreen back = new StartScreen();
+		try {
+			StartScreen back = new StartScreen();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		setVisible(false);
 		dispose();
 	}
