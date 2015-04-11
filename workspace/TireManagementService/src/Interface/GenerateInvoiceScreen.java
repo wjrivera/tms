@@ -80,8 +80,9 @@ public class GenerateInvoiceScreen extends JFrame {
 		add(topLevelCont);
 
 		setResizable(false);
+		//setSize(700, 450);
+		setSize(1400, 900);
 		setLocationRelativeTo(null);
-		setSize(700, 450);
 		setVisible(true);
 	}
 

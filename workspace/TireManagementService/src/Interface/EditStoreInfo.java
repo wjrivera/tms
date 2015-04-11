@@ -166,7 +166,8 @@ public class EditStoreInfo extends JFrame {
 
 		//Setting the main panel
 		setResizable(false);
-		setSize(700, 450);
+		//setSize(700, 450);
+		setSize(1400, 900);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}

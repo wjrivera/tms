@@ -91,7 +91,9 @@ public class SetPaymentInfo extends JFrame {
 				options();
 			}
 
-		});		
+		});	
+		
+		
 		
 		// Add buttons and labels to panels
 		panel.add(bankNameLabel,BorderLayout.WEST);
@@ -152,7 +154,8 @@ public class SetPaymentInfo extends JFrame {
 
 		//Setting the main panel
 		setResizable(false);
-		setSize(700, 450);
+		//setSize(700, 450);
+		setSize(1400, 900);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}

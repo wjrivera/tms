@@ -101,6 +101,8 @@ public class OptionsScreen extends JFrame {
 			}
 
 		});
+		
+		
 
 		botButtonsPanel.add(editStoreButton);
 		botButtonsPanel.add(editCurrencyButton);
@@ -117,8 +119,9 @@ public class OptionsScreen extends JFrame {
 		add(topLevelCont);
 
 		setResizable(false);
+		//setSize(700, 450);
+		setSize(1400, 900);
 		setLocationRelativeTo(null);
-		setSize(700, 450);
 		setVisible(true);
 	}
 
