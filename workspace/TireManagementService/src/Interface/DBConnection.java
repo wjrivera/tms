@@ -1,159 +1,86 @@
 package Interface;
+import java.sql.*;
+import java.util.Properties;
+import java.util.logging.Logger;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+/**
+ * Created by jay on 2/24/15.
+ * Tested by wjr on 4/10/2015
+ */
+public class DBConnection implements Driver{
 
-public class StartScreen extends JFrame {
+    public DBConnection() {
+        Connection conn = null;
 
-	public static final String TITLE = "Tire Management System";
+        try {
+            String userName = "root";
+            String password = "FGCU500";
+            String url = "jdbc:mysql:127.0.0.1:3306";
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
 
-	JMenuBar menuBar;
-	JMenu menu, submenu;
-	JMenuItem menuItem;
-	JRadioButtonMenuItem rbMenuItem;
-	JCheckBoxMenuItem cbMenuItem;
+            conn = DriverManager.getConnection(url, userName, password);
+            System.out.println("Database connection established");
+        } catch (Exception e) {
+            System.err.println("Cannot connect to database server "+e.getMessage());
 
-	//hello
-	JPanel screenLayout;
-	JPanel buttonsLayout;
-	JPanel centerPanel;
+        }
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                    System.out.println("Database connection terminated");
+                } catch (Exception e) { /* ignore close errors */ }
+            }
+        }
+    }
+    
+/*    public static void main(String[] args){
+    	
+    	DBConnection connect = new DBConnection();
+    	
+    }*/
 
-	JLabel titleLabel;
-
-	JTextField searchField;
-
-	JButton searchByDateButton, searchByCustomerButton, optionsButton,
-			generateInvoiceButton;
-
-	public StartScreen() {
-
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		screenLayout = new JPanel();
-		screenLayout.setLayout(new BorderLayout());
-
-		titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
-		titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
-
-		JPanel searchFieldPanel = new JPanel();
-		searchFieldPanel.setLayout(new FlowLayout());
-		searchField = new JTextField(
-				"Search here                                                                      ");
-
-		centerPanel = new JPanel();
-		centerPanel.setLayout(new GridLayout(2, 1));
-		buttonsLayout = new JPanel();
-		buttonsLayout.setLayout(new GridLayout(2, 2, 15, 15));
-
-		JPanel holder = new JPanel();
-		holder.setLayout(new BorderLayout());
-
-		searchFieldPanel.add(searchField);
-		holder.add(searchFieldPanel, BorderLayout.PAGE_END);
-		holder.add(titleLabel, BorderLayout.CENTER);
-
-		centerPanel.add(holder);
-
-		searchByDateButton = new JButton("Search by Date");
-		searchByCustomerButton = new JButton("Search by Customer");
-		optionsButton = new JButton("Options");
-		generateInvoiceButton = new JButton("Generate Invoice");
-
-		// adding the listeners
-		searchByDateButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				searchByDate(null);
-			}
-
-		});
-		searchByCustomerButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				searchByCustomer(searchField.getText());
-			}
-
-		});
-		optionsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				options();
-			}
-
-		});
-		generateInvoiceButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				generateInvoice();
-			}
-
-		});
-
-		buttonsLayout.add(searchByDateButton);
-		buttonsLayout.add(searchByCustomerButton);
-		buttonsLayout.add(optionsButton);
-		buttonsLayout.add(generateInvoiceButton);
-
-		centerPanel.add(buttonsLayout);
-
-		// fillers
-		screenLayout.add(new JLabel("         "), BorderLayout.LINE_START);
-		screenLayout.add(new JLabel("         "), BorderLayout.LINE_END);
-		// end fillers
-		screenLayout.add(centerPanel, BorderLayout.CENTER);
-
-		this.add(screenLayout);
-
-		setResizable(false);
-		setLocationRelativeTo(null);
-		setSize(700, 450);
-		setVisible(true);
-
+	@Override
+	public boolean acceptsURL(String arg0) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	public void searchByDate(Date d) {
-		DateSearchScreen newInstance = new DateSearchScreen();
-		setVisible(false);
-		dispose();
+	@Override
+	public Connection connect(String arg0, Properties arg1) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void searchByCustomer(String cust) {
-		CustomerSearchScreen newInstance = new CustomerSearchScreen();
-		setVisible(false);
-		dispose();
+	@Override
+	public int getMajorVersion() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	public void options() {
-		OptionsScreen newInstance = new OptionsScreen();
-		setVisible(false);
-		dispose();
+	@Override
+	public int getMinorVersion() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	public void generateInvoice() {
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen();
-		setVisible(false);
-		dispose();
+	@Override
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public static void main(String[] args) {
-		StartScreen start = new StartScreen();
+	@Override
+	public DriverPropertyInfo[] getPropertyInfo(String arg0, Properties arg1)
+			throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
+	@Override
+	public boolean jdbcCompliant() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
