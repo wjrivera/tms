@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * Created by jay on 2/24/15.
- * Tested by wjr on 4/10/2015
+ * Tested by wjr on 4/10/15
  */
 public class DBConnection implements Driver{
 
