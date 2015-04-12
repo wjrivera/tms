@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,23 +21,24 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
-import utilities.Invoice;
 
 public class CustomerSearchScreen extends JFrame {
 
 	private static final String TITLE = "Search By Customer";
 	DatabaseConnectivity dbc = null;
 
-	List<Invoice> invoices;
+	List<Client> clients;
 
+	private static String searchTerm;
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
+	JList clientsList;
 	JScrollPane jobs;
 
 	public CustomerSearchScreen() throws ClassNotFoundException, SQLException {
 
 		dbc = DatabaseConnectivity.getInstance();
 
-		invoices = new ArrayList<Invoice>();
+		clients = new ArrayList<Client>();
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,10 +110,8 @@ public class CustomerSearchScreen extends JFrame {
 		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
 
 		// ScrollBar
-		JPanel jobContainer = new JPanel();
-		jobs = new JScrollPane(jobContainer,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		jobs = getScrollPane();
+		jobs.getViewport().setBackground(Color.WHITE);
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
@@ -127,15 +128,25 @@ public class CustomerSearchScreen extends JFrame {
 		setSize(700, 450);
 		setVisible(true);
 
-		populate();
 	}
 
-	private void populate() {
+	public static void setSearchTerm(String sT) {
 
-		for (Invoice i : invoices) {
-			InvoiceSummaryItem item = new InvoiceSummaryItem(i);
-			this.add(item);
-		}
+		searchTerm = sT;
+	}
+
+	private JScrollPane getScrollPane() throws SQLException {
+
+		clients = dbc.getClientsByName(searchTerm);
+
+		clientsList = new JList(clients.toArray());
+		clientsList.setFont(new Font("Serif", Font.BOLD, 20));
+		clientsList.setCellRenderer(new ClientCellRenderer());
+		clientsList.setVisibleRowCount(8);
+
+		return new JScrollPane(clientsList,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 	}
 
@@ -167,6 +178,8 @@ public class CustomerSearchScreen extends JFrame {
 			temp.setZip(customerInfo.zip.getText());
 
 			dbc.addClient(temp);
+
+			jobs = getScrollPane();
 		}
 
 		// TODO: Add Customer to database using the DatabaseConnectivty

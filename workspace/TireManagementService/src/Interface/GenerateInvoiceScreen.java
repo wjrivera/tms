@@ -87,6 +87,8 @@ public class GenerateInvoiceScreen extends JFrame {
 		setVisible(true);
 	}
 
+	
+	
 	public void backToMain() {
 		// close the current window()
 		try {

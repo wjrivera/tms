@@ -18,6 +18,10 @@ public class Client {
 		clientId = UUID.randomUUID();
 	}
 
+	public Client(String id) {
+		clientId = UUID.fromString(id);
+	}
+
 	public String getCity() {
 		return city;
 	}
@@ -40,6 +44,10 @@ public class Client {
 
 	public void setZip(String zip) {
 		this.zip = zip;
+	}
+
+	public void setClientId(String id) {
+		clientId = UUID.fromString(id);
 	}
 
 	public UUID getClientId() {
@@ -85,6 +93,10 @@ public class Client {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String toString(){
+		return lastName + ", " + firstName;
 	}
 
 }
