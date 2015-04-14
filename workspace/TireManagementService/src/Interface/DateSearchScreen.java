@@ -6,26 +6,41 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import utilities.Client;
+import utilities.Invoice;
+
 public class DateSearchScreen extends JFrame {
 
 	public static final String TITLE = "Search By Date";
+	DatabaseConnectivity dbc = null;
 	
+	List<Invoice> invoices;
+
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
+	JList invoicesList;
 	JScrollPane jobs;
 
-	public DateSearchScreen() {
+	public DateSearchScreen() throws ClassNotFoundException, SQLException {
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		dbc = DatabaseConnectivity.getInstance();
+
+		invoices = new ArrayList<Invoice>();
 		
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
@@ -103,6 +118,21 @@ public class DateSearchScreen extends JFrame {
 		setVisible(true);
 	}
 
+	private JScrollPane getScrollPane() throws SQLException {
+
+		invoices = dbc.getInvoicesByDate();
+
+		invoicesList = new JList(invoices.toArray());
+		invoicesList.setFont(new Font("Serif", Font.BOLD, 20));
+		invoicesList.setCellRenderer(new InvoiceCellRenderer());
+		invoicesList.setVisibleRowCount(4);
+
+		return new JScrollPane(invoicesList,
+				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+	}
+	
 	public void backToMain() throws ClassNotFoundException, SQLException {
 		// close the current window()
 		StartScreen back = new StartScreen();
@@ -110,8 +140,30 @@ public class DateSearchScreen extends JFrame {
 		dispose();
 	}
 
-	public void addCustomer() {
+	public void addCustomer() throws SQLException {
 
+		NewCustomerScreen customerInfo = new NewCustomerScreen();
+
+		int result = JOptionPane.showConfirmDialog(null, customerInfo,
+				NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			Client temp = new Client();
+
+			temp.setFirstName(customerInfo.firstName.getText());
+			temp.setLastName(customerInfo.lastName.getText());
+			temp.setEmail(customerInfo.email.getText());
+			temp.setPhoneNumber(customerInfo.phoneNumber.getText());
+			temp.setAddress(customerInfo.address.getText());
+			temp.setCity(customerInfo.city.getText());
+			temp.setState(customerInfo.state.getText());
+			temp.setZip(customerInfo.zip.getText());
+
+			dbc.addClient(temp);
+
+			jobs = getScrollPane();
+		}
 	}
 
 	public void generateInvoice() {

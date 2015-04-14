@@ -20,6 +20,10 @@ public class Invoice {
 		date = d;
 	}
 
+	public Invoice(int invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
 	public Client getClient() {
 		return client;
 	}
@@ -50,6 +54,14 @@ public class Invoice {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public Integer getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public void setInvoiceNumber(Integer invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 
 }

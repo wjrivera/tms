@@ -182,23 +182,12 @@ public class CustomerSearchScreen extends JFrame {
 			jobs = getScrollPane();
 		}
 
-		// TODO: Add Customer to database using the DatabaseConnectivty
-		// class
-
 	}
 
 	public void generateInvoice() {
 		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen();
 		setVisible(false);
 		dispose();
-	}
-
-	public void generateMockInvoices() {
-
-		for (int i = 0; i < 10; i++) {
-			// Client a = new Client()
-		}
-
 	}
 
 }

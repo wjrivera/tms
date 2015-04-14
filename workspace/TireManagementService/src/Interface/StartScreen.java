@@ -89,7 +89,12 @@ public class StartScreen extends JFrame {
 		searchByDateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				searchByDate(null);
+				try {
+					searchByDate(null);
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -138,7 +143,8 @@ public class StartScreen extends JFrame {
 
 	}
 
-	public void searchByDate(Date d) {
+	public void searchByDate(Date d) throws ClassNotFoundException,
+			SQLException {
 		DateSearchScreen newInstance = new DateSearchScreen();
 		setVisible(false);
 		dispose();

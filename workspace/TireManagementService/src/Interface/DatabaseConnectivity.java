@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import utilities.Client;
 import utilities.Invoice;
@@ -59,6 +60,50 @@ public class DatabaseConnectivity implements Serializable {
 
 	}
 
+	public Client getClientFromId(UUID clientId) throws SQLException {
+
+		Client c = new Client();
+
+		String getClient = "SELECT * FROM client " + "WHERE id LIKE ?;";
+
+		PreparedStatement getStatement = conn.prepareStatement(getClient);
+		getStatement.setString(1, clientId.toString());
+		ResultSet rs = getStatement.executeQuery();
+
+		while (rs.next()) {
+			c = new Client(rs.getString("id"));
+			c.setFirstName(rs.getString("firstName"));
+			c.setLastName(rs.getString("lastName"));
+			c.setEmail(rs.getString("email"));
+			c.setPhoneNumber(rs.getString("phone_number"));
+			c.setAddress(rs.getString("address"));
+			c.setCity(rs.getString("city"));
+			c.setState(rs.getString("state"));
+			c.setZip(rs.getString("zip"));
+		}
+
+		return c;
+	}
+
+	public String getClientNameFromId(UUID clientId) throws SQLException {
+		String name = "";
+
+		String getClient = "SELECT CONCAT(firstName, ' ', lastName) AS name "
+				+ "FROM client WHERE id LIKE ?;";
+
+		PreparedStatement getStatement = conn.prepareStatement(getClient);
+		getStatement.setString(1, clientId.toString());
+		ResultSet rs = getStatement.executeQuery();
+
+		while (rs.next()) {
+			name = rs.getString("name");
+		}
+
+		System.out.println(name);
+
+		return name;
+	}
+
 	public void addClient(Client c) throws SQLException {
 		String addClient = "INSERT INTO client"
 				+ "(id, firstName, lastName, email, phone_number, address, city, state, zip)"
@@ -80,7 +125,16 @@ public class DatabaseConnectivity implements Serializable {
 	}
 
 	public void addInvoice(Invoice i) throws SQLException {
-		String addInvoice = "";
+		String addInvoice = "INSERT INTO invoice"
+				+ "(invoiceNum, client_id,date)" + "VALUES (?,?,?);";
+
+		PreparedStatement addInvoiceStatement = conn
+				.prepareStatement(addInvoice);
+		addInvoiceStatement.setInt(1, i.getInvoiceNumber());
+		addInvoiceStatement.setString(2, i.getClientId().toString());
+
+		addInvoiceStatement.executeUpdate();
+
 	}
 
 	public List<Client> getClientsByName(String name) throws SQLException {
@@ -113,12 +167,6 @@ public class DatabaseConnectivity implements Serializable {
 		return returnList;
 	}
 
-	public List<Client> getClientsByDate() {
-		List<Client> returnList = new ArrayList<Client>();
-
-		return returnList;
-	}
-
 	public static DatabaseConnectivity getInstance()
 			throws ClassNotFoundException, SQLException {
 		if (instance == null) {
@@ -126,6 +174,30 @@ public class DatabaseConnectivity implements Serializable {
 		}
 
 		return instance;
+	}
+
+	public List<Invoice> getInvoicesByDate() throws SQLException {
+		List<Invoice> returnList = new ArrayList<Invoice>();
+
+		String retrieveSQL = "SELECT * FROM invoice " + "ORDER BY date";
+
+		PreparedStatement retrieveInvoices = conn.prepareStatement(retrieveSQL);
+
+		ResultSet rs = retrieveInvoices.executeQuery();
+
+		while (rs.next()) {
+			Invoice temp = new Invoice(Integer.parseInt(rs
+					.getString("invoice_num")));
+			Client c = getClientFromId(UUID.fromString(rs
+					.getString("client_id")));
+
+			temp.setClient(c);
+			temp.setDate(rs.getDate("date"));
+
+			returnList.add(temp);
+		}
+
+		return returnList;
 	}
 
 }
