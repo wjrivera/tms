@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import utilities.Client;
+import utilities.Invoice;
 import utilities.Job;
 import utilities.Tire;
 import utilities.Vehicle;
@@ -40,9 +41,13 @@ public class NewInvoiceScreen extends JPanel {
 	private NewCustomerScreen newCust;
 	public List<Job> jobs;
 	public List<Tire> tires;
+	private Invoice i;
 
-	public NewInvoiceScreen(Client cl) {
+	public NewInvoiceScreen(Client cl, Invoice in) {
 
+		if (in != null) {
+			i = in;
+		}
 		client = cl;
 
 		jobs = new ArrayList<Job>();
@@ -117,8 +122,13 @@ public class NewInvoiceScreen extends JPanel {
 		vehiclesScroll = getScrollPane();
 		jobsScroll = getJobsPane();
 
+		JLabel invoiceNumber = new JLabel("Invoice Number "
+				+ Invoice.NextInvoiceNumber);
+		invoiceNumber.setFont(new Font("Serif", Font.BOLD, 20));
+
 		JLabel billingInfo = new JLabel("Billing Information");
 		billingInfo.setFont(new Font("Serif", Font.BOLD, 17));
+		add(invoiceNumber);
 		add(billingInfo);
 		add(new JLabel(" "));
 

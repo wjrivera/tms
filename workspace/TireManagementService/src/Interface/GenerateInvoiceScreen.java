@@ -36,9 +36,12 @@ public class GenerateInvoiceScreen extends JFrame {
 	Client client;
 	DatabaseConnectivity dbc;
 
-	public GenerateInvoiceScreen(Client c) throws ClassNotFoundException,
-			SQLException {
+	public GenerateInvoiceScreen(Client c, Invoice in)
+			throws ClassNotFoundException, SQLException {
 
+		if (in != null) {
+			i = in;
+		}
 		dbc = DatabaseConnectivity.getInstance();
 
 		client = c;
@@ -118,7 +121,7 @@ public class GenerateInvoiceScreen extends JFrame {
 		// actual one
 		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
 
-		screen = new NewInvoiceScreen(c);
+		screen = new NewInvoiceScreen(c, i);
 		// ScrollBar
 		invoice = new JScrollPane(screen,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

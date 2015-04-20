@@ -36,7 +36,7 @@ public class StartScreen extends JFrame {
 
 	public static final String TITLE = "Tire Management System";
 	public static boolean fresh = true;
-	
+
 	JMenuBar menuBar;
 	JMenu menu, submenu;
 	JMenuItem menuItem;
@@ -60,14 +60,14 @@ public class StartScreen extends JFrame {
 
 	public StartScreen() throws ClassNotFoundException, SQLException {
 
-		if(fresh){
-		try {
-			dbc.setInvoiceCount();
-			fresh = false;
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		if (fresh) {
+			try {
+				dbc.setInvoiceCount();
+				fresh = false;
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 		}
 
 		logo = new ImageIcon(System.getProperty("user.dir")
@@ -263,7 +263,8 @@ public class StartScreen extends JFrame {
 
 			dbc.addClient(temp);
 
-			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
+					null);
 			setVisible(false);
 			dispose();
 		}

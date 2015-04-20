@@ -48,11 +48,14 @@ public class CustomerSearchScreen extends JFrame {
 		clients = new ArrayList<Client>();
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		WindowListener exitListener = new WindowAdapter(){
+		WindowListener exitListener = new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e){
-				int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close Application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-				if(confirm == 0){
+			public void windowClosing(WindowEvent e) {
+				int confirm = JOptionPane.showOptionDialog(null,
+						"Are You Sure to Close Application?",
+						"Exit Confirmation", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if (confirm == 0) {
 					try {
 						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
@@ -63,7 +66,7 @@ public class CustomerSearchScreen extends JFrame {
 				}
 			}
 		};
-		
+
 		addWindowListener(exitListener);
 
 		// set up the buttons
@@ -217,10 +220,11 @@ public class CustomerSearchScreen extends JFrame {
 	}
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
-		
+
 		Client temp = clients.get(clientsList.getSelectedIndex());
-		
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
+
+		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
+				null);
 		setVisible(false);
 		dispose();
 	}
@@ -232,7 +236,7 @@ public class CustomerSearchScreen extends JFrame {
 		public ClientListModel(List<Client> clients) {
 			this.clients = clients;
 		}
-		
+
 		@Override
 		public Client getElementAt(int index) {
 			return clients.get(index);

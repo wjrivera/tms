@@ -30,7 +30,7 @@ public class DateSearchScreen extends JFrame {
 
 	public static final String TITLE = "Search By Date";
 	DatabaseConnectivity dbc = null;
-	
+
 	List<Invoice> invoices;
 
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
@@ -42,13 +42,16 @@ public class DateSearchScreen extends JFrame {
 		dbc = DatabaseConnectivity.getInstance();
 
 		invoices = new ArrayList<Invoice>();
-		
+
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		WindowListener exitListener = new WindowAdapter(){
+		WindowListener exitListener = new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent e){
-				int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close TMS?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-				if(confirm == 0){
+			public void windowClosing(WindowEvent e) {
+				int confirm = JOptionPane.showOptionDialog(null,
+						"Are You Sure to Close TMS?", "Exit Confirmation",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if (confirm == 0) {
 					try {
 						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
@@ -59,7 +62,7 @@ public class DateSearchScreen extends JFrame {
 				}
 			}
 		};
-		
+
 		addWindowListener(exitListener);
 
 		// set up the buttons
@@ -158,7 +161,7 @@ public class DateSearchScreen extends JFrame {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 	}
-	
+
 	public void backToMain() throws ClassNotFoundException, SQLException {
 		// close the current window()
 		StartScreen back = new StartScreen();
@@ -193,7 +196,10 @@ public class DateSearchScreen extends JFrame {
 	}
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null);
+		
+		//TODO second parameter should not be null;
+		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
+				null);
 		setVisible(false);
 		dispose();
 	}
