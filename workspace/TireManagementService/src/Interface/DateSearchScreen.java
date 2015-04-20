@@ -167,7 +167,7 @@ public class DateSearchScreen extends JFrame {
 	}
 
 	public void generateInvoice() {
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen();
+		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null);
 		setVisible(false);
 		dispose();
 	}

@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -16,11 +18,14 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import utilities.Client;
 
 public class StartScreen extends JFrame {
 
@@ -44,6 +49,8 @@ public class StartScreen extends JFrame {
 
 	JButton searchByDateButton, searchByCustomerButton, optionsButton,
 			generateInvoiceButton;
+
+	DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
 
 	public StartScreen() throws ClassNotFoundException, SQLException {
 
@@ -85,6 +92,18 @@ public class StartScreen extends JFrame {
 		optionsButton = new JButton("Options");
 		generateInvoiceButton = new JButton("Generate Invoice");
 
+		searchField.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				searchField.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				searchField.setText(searchField.getText());
+			}
+		});
+
 		// adding the listeners
 		searchByDateButton.addActionListener(new ActionListener() {
 			@Override
@@ -115,7 +134,12 @@ public class StartScreen extends JFrame {
 		generateInvoiceButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				generateInvoice();
+				try {
+					generateInvoice();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -140,6 +164,8 @@ public class StartScreen extends JFrame {
 		setLocationRelativeTo(null);
 		setSize(700, 450);
 		setVisible(true);
+
+		optionsButton.requestFocus();
 
 	}
 
@@ -168,8 +194,32 @@ public class StartScreen extends JFrame {
 		dispose();
 	}
 
-	public void generateInvoice() {
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen();
+	public void generateInvoice() throws SQLException {
+
+		NewCustomerScreen customerInfo = new NewCustomerScreen();
+
+		Client temp = new Client();
+
+		int result = JOptionPane.showConfirmDialog(null, customerInfo,
+				NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+
+			temp.setFirstName(customerInfo.firstName.getText());
+			temp.setLastName(customerInfo.lastName.getText());
+			temp.setEmail(customerInfo.email.getText());
+			temp.setPhoneNumber(customerInfo.phoneNumber.getText());
+			temp.setAddress(customerInfo.address.getText());
+			temp.setCity(customerInfo.city.getText());
+			temp.setState(customerInfo.state.getText());
+			temp.setZip(customerInfo.zip.getText());
+			temp.setVehicle(customerInfo.vehicles);
+
+			dbc.addClient(temp);
+		}
+
+		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
 		setVisible(false);
 		dispose();
 	}

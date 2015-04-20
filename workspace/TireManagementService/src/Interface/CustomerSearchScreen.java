@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +31,7 @@ public class CustomerSearchScreen extends JFrame {
 	List<Client> clients;
 
 	private static String searchTerm;
+	private ClientListModel cLM;
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
 	JList clientsList;
 	JScrollPane jobs;
@@ -139,7 +141,9 @@ public class CustomerSearchScreen extends JFrame {
 
 		clients = dbc.getClientsByName(searchTerm);
 
-		clientsList = new JList(clients.toArray());
+		cLM = new ClientListModel(clients);
+
+		clientsList = new JList(cLM);
 		clientsList.setFont(new Font("Serif", Font.BOLD, 20));
 		clientsList.setCellRenderer(new ClientCellRenderer());
 		clientsList.setVisibleRowCount(8);
@@ -176,6 +180,7 @@ public class CustomerSearchScreen extends JFrame {
 			temp.setCity(customerInfo.city.getText());
 			temp.setState(customerInfo.state.getText());
 			temp.setZip(customerInfo.zip.getText());
+			temp.setVehicle(customerInfo.vehicles);
 
 			dbc.addClient(temp);
 
@@ -185,9 +190,32 @@ public class CustomerSearchScreen extends JFrame {
 	}
 
 	public void generateInvoice() {
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen();
+		
+		Client temp = clients.get(clientsList.getSelectedIndex());
+		
+		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
 		setVisible(false);
 		dispose();
+	}
+
+	public class ClientListModel extends AbstractListModel<Client> {
+
+		private List<Client> clients;
+
+		public ClientListModel(List<Client> clients) {
+			this.clients = clients;
+		}
+		
+		@Override
+		public Client getElementAt(int index) {
+			return clients.get(index);
+		}
+
+		@Override
+		public int getSize() {
+			return clients.size();
+		}
+
 	}
 
 }

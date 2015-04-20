@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,30 +16,42 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import utilities.Client;
+
 public class GenerateInvoiceScreen extends JFrame {
 
 	private static final String TITLE = "Generate Invoice";
 
-	JButton backToMainButton;
+	JButton backToMainButton, addInvoice;
 	JScrollPane invoice;
+	NewInvoiceScreen screen;
 
-	public GenerateInvoiceScreen() {
+	public GenerateInvoiceScreen(Client c) {
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
+		buttonsPanel.setLayout(new GridLayout(1, 5, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
-
+		addInvoice = new JButton("Add Invoice");
+		
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				backToMain();
 			}
 		});
+		addInvoice.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				addInvoice();
+			}
+		});
 
+		buttonsPanel.add(new JPanel());
+		buttonsPanel.add(addInvoice);
 		buttonsPanel.add(new JPanel());
 		buttonsPanel.add(backToMainButton);
 		buttonsPanel.add(new JPanel());
@@ -57,6 +70,8 @@ public class GenerateInvoiceScreen extends JFrame {
 		JPanel topContainer = new JPanel();
 		topContainer.setLayout(new BorderLayout());
 
+		
+		
 		// fillers
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_START);
 		topContainer.add(new JLabel("      "), BorderLayout.LINE_START);
@@ -65,11 +80,14 @@ public class GenerateInvoiceScreen extends JFrame {
 		// actual one
 		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
 
+		screen = new NewInvoiceScreen(c);
 		// ScrollBar
-		JPanel invoiceContainer = new JPanel();
-		invoice = new JScrollPane(invoiceContainer,
+		invoice = new JScrollPane(screen,
 				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		invoice.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 10,
+				10));
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
@@ -86,9 +104,11 @@ public class GenerateInvoiceScreen extends JFrame {
 		setSize(700, 450);
 		setVisible(true);
 	}
+	
+	public void addInvoice(){
+		
+	}
 
-	
-	
 	public void backToMain() {
 		// close the current window()
 		try {

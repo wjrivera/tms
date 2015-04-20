@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import utilities.Client;
 import utilities.Invoice;
+import utilities.Vehicle;
 
 public class DatabaseConnectivity implements Serializable {
 
@@ -51,7 +52,11 @@ public class DatabaseConnectivity implements Serializable {
 				+ "job_name VARCHAR(200)," + "price DECIMAL,"
 				+ "CONSTRAINT pk_job_id PRIMARY KEY(invoice_num, job_name),"
 				+ "CONSTRAINT fk_invoice_num FOREIGN KEY(invoice_num) "
-				+ "REFERENCES invoice(invoice_num)" + ");";
+				+ "REFERENCES invoice(invoice_num)" + ");"
+				+ "CREATE TABLE IF NOT EXISTS vehicle(" + "id VARCHAR(50),"
+				+ "client_id VARCHAR(50)," + "make VARCHAR(25),"
+				+ "model VARCHAR(25)," + "year INT,"
+				+ "CONSTRAINT pk_vehicle PRIMARY KEY(id, client_id));";
 
 		PreparedStatement createDBStatement = conn
 				.prepareStatement(createDatabases);
@@ -85,10 +90,64 @@ public class DatabaseConnectivity implements Serializable {
 		return c;
 	}
 
+	public List<Vehicle> getVehiclesFromClientId(String id) throws SQLException {
+		List<Vehicle> ret = new ArrayList<Vehicle>();
+
+		final String getVehicles = "SELECT * FROM vehicle "
+				+ "WHERE client_id LIKE ?;";
+
+		PreparedStatement getStatement = conn.prepareStatement(getVehicles);
+		getStatement.setString(1, id);
+		ResultSet rs = getStatement.executeQuery();
+
+		while (rs.next()) {
+			ret.add(new Vehicle(rs.getInt("year"), rs.getString("make"), rs
+					.getString("model"), UUID.fromString(rs.getString("id"))));
+		}
+
+		return ret;
+
+	}
+
+	public void addVehicle(Vehicle v, String clientId) throws SQLException {
+
+		final String addVehicle = "INSERT INTO vehicle"
+				+ "(id, client_id, year, make, model)" + "VALUES (?,?,?,?,?);";
+
+		PreparedStatement addVehicleStatement = conn
+				.prepareStatement(addVehicle);
+		addVehicleStatement.setString(1, v.getId().toString());
+		addVehicleStatement.setString(2, clientId);
+		addVehicleStatement.setInt(3, v.getYear());
+		addVehicleStatement.setString(4, v.getMake());
+		addVehicleStatement.setString(5, v.getModel());
+
+		addVehicleStatement.executeUpdate();
+	}
+
+	public void addVehicles(List<Vehicle> vehicles, String clientId)
+			throws SQLException {
+
+		final String addVehicles = "INSERT INTO vehicle"
+				+ "(id, client_id, year, make, model)" + "VALUES (?,?,?,?,?);";
+
+		for (Vehicle v : vehicles) {
+			PreparedStatement addVehiclesStatement = conn
+					.prepareStatement(addVehicles);
+			addVehiclesStatement.setString(1, v.getId().toString());
+			addVehiclesStatement.setString(2, clientId);
+			addVehiclesStatement.setInt(3, v.getYear());
+			addVehiclesStatement.setString(4, v.getMake());
+			addVehiclesStatement.setString(5, v.getModel());
+
+			addVehiclesStatement.executeUpdate();
+		}
+	}
+
 	public String getClientNameFromId(UUID clientId) throws SQLException {
 		String name = "";
 
-		String getClient = "SELECT CONCAT(firstName, ' ', lastName) AS name "
+		final String getClient = "SELECT CONCAT(firstName, ' ', lastName) AS name "
 				+ "FROM client WHERE id LIKE ?;";
 
 		PreparedStatement getStatement = conn.prepareStatement(getClient);
@@ -122,6 +181,8 @@ public class DatabaseConnectivity implements Serializable {
 
 		addClientStatement.executeUpdate();
 
+		addVehicles(c.getVehicle(), c.getClientId().toString());
+
 	}
 
 	public void addInvoice(Invoice i) throws SQLException {
@@ -151,6 +212,7 @@ public class DatabaseConnectivity implements Serializable {
 		ResultSet rs = retrieveClient.executeQuery();
 
 		while (rs.next()) {
+
 			Client temp = new Client(rs.getString("id"));
 			temp.setFirstName(rs.getString("firstName"));
 			temp.setLastName(rs.getString("lastName"));
@@ -161,7 +223,13 @@ public class DatabaseConnectivity implements Serializable {
 			temp.setState(rs.getString("state"));
 			temp.setZip(rs.getString("zip"));
 
+			List<Vehicle> tempV = getVehiclesFromClientId(temp.getClientId()
+					.toString());
+
+			temp.setVehicle(tempV);
+
 			returnList.add(temp);
+
 		}
 
 		return returnList;

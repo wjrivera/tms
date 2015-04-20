@@ -33,7 +33,6 @@ public class ClientCellRenderer extends JLabel implements ListCellRenderer {
 		setFont(new Font("Serif", Font.BOLD, 20));
 
 		System.out.println("here");
-		// add(viewButton);
 
 		super.setEnabled(list.isEnabled());
 		super.setFont(list.getFont());

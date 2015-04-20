@@ -13,11 +13,21 @@ public class Invoice {
 	private UUID clientId;
 	private List<Job> jobs = new ArrayList<Job>();
 	private Date date;
+	private Vehicle vehicle;
 
-	public Invoice(Client c, UUID id, Date d) {
+	public Invoice(Client c, UUID id, Date d, Vehicle v) {
 		client = c;
 		clientId = id;
 		date = d;
+		vehicle = v;
+	}
+
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 
 	public Invoice(int invoiceNumber) {

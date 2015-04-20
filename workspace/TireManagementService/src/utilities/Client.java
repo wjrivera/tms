@@ -1,5 +1,7 @@
 package utilities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Client {
@@ -13,13 +15,16 @@ public class Client {
 	private String city;
 	private String state;
 	private String zip;
+	private List<Vehicle> vehicle;
 
 	public Client() {
 		clientId = UUID.randomUUID();
+		vehicle = new ArrayList<Vehicle>();
 	}
 
 	public Client(String id) {
 		clientId = UUID.fromString(id);
+		vehicle = new ArrayList<Vehicle>();
 	}
 
 	public String getCity() {
@@ -94,9 +99,17 @@ public class Client {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return lastName + ", " + firstName;
+	}
+
+	public List<Vehicle> getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(List<Vehicle> vehicle) {
+		this.vehicle = vehicle;
 	}
 
 }
