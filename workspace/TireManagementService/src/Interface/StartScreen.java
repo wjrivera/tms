@@ -7,6 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -26,11 +30,13 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
+import utilities.Invoice;
 
 public class StartScreen extends JFrame {
 
 	public static final String TITLE = "Tire Management System";
-
+	public static boolean fresh = true;
+	
 	JMenuBar menuBar;
 	JMenu menu, submenu;
 	JMenuItem menuItem;
@@ -54,12 +60,21 @@ public class StartScreen extends JFrame {
 
 	public StartScreen() throws ClassNotFoundException, SQLException {
 
+		if(fresh){
+		try {
+			dbc.setInvoiceCount();
+			fresh = false;
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		}
+
 		logo = new ImageIcon(System.getProperty("user.dir")
 				+ "\\resources\\logo.png");
 
-		DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
+		final DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		screenLayout = new JPanel();
 		screenLayout.setLayout(new BorderLayout());
 
@@ -127,7 +142,12 @@ public class StartScreen extends JFrame {
 		optionsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				options();
+				try {
+					options();
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -137,6 +157,9 @@ public class StartScreen extends JFrame {
 				try {
 					generateInvoice();
 				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -167,6 +190,28 @@ public class StartScreen extends JFrame {
 
 		optionsButton.requestFocus();
 
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		WindowListener exitListener = new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int confirm = JOptionPane.showOptionDialog(null,
+						"Are You Sure to Close TMS?", "Exit Confirmation",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if (confirm == 0) {
+					try {
+						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.exit(0);
+				}
+			}
+		};
+
+		addWindowListener(exitListener);
+
 	}
 
 	public void searchByDate(Date d) throws ClassNotFoundException,
@@ -188,13 +233,13 @@ public class StartScreen extends JFrame {
 		dispose();
 	}
 
-	public void options() {
+	public void options() throws ClassNotFoundException, SQLException {
 		OptionsScreen newInstance = new OptionsScreen();
 		setVisible(false);
 		dispose();
 	}
 
-	public void generateInvoice() throws SQLException {
+	public void generateInvoice() throws SQLException, ClassNotFoundException {
 
 		NewCustomerScreen customerInfo = new NewCustomerScreen();
 
@@ -217,11 +262,11 @@ public class StartScreen extends JFrame {
 			temp.setVehicle(customerInfo.vehicles);
 
 			dbc.addClient(temp);
-		}
 
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
-		setVisible(false);
-		dispose();
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp);
+			setVisible(false);
+			dispose();
+		}
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException,

@@ -5,14 +5,21 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import utilities.Invoice;
 
 public class OptionsScreen extends JFrame {
 
@@ -21,9 +28,33 @@ public class OptionsScreen extends JFrame {
 	JButton backToMainButton, editStoreButton, editCurrencyButton,
 			setPaymentButton, addInventoryButton;
 
-	public OptionsScreen() {
+	DatabaseConnectivity dbc;
 
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	public OptionsScreen() throws ClassNotFoundException, SQLException {
+
+		dbc = DatabaseConnectivity.getInstance();
+
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		WindowListener exitListener = new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int confirm = JOptionPane.showOptionDialog(null,
+						"Are You Sure to Close TMS?", "Exit Confirmation",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if (confirm == 0) {
+					try {
+						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.exit(0);
+				}
+			}
+		};
+
+		addWindowListener(exitListener);
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();

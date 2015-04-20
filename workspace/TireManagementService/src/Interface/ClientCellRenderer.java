@@ -4,10 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import utilities.Client;
@@ -28,11 +26,9 @@ public class ClientCellRenderer extends JLabel implements ListCellRenderer {
 		}
 
 		Client temp = (Client) client;
-		
+
 		setText(temp.toString());
 		setFont(new Font("Serif", Font.BOLD, 20));
-
-		System.out.println("here");
 
 		super.setEnabled(list.isEnabled());
 		super.setFont(list.getFont());

@@ -11,6 +11,7 @@ public class Tire {
 	double width;
 	int year;
 	double thread;
+	double price;
 
 	public Tire() {
 		System.out.println("Please enter a tire size");
@@ -18,9 +19,9 @@ public class Tire {
 
 	public Tire(String tireSize) {
 		if (!checkNumber(tireSize)) {
-			System.out.println("Numero Incorrecto");
+			System.out.println("Incorrect number");
 		} else {
-			System.out.println("Numero Correcto");
+			System.out.println("Correct Number");
 			parseIntoSpecificSizes(tireSize);
 		}
 

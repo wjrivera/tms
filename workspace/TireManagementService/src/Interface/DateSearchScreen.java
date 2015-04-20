@@ -5,6 +5,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,24 @@ public class DateSearchScreen extends JFrame {
 
 		invoices = new ArrayList<Invoice>();
 		
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		WindowListener exitListener = new WindowAdapter(){
+			@Override
+			public void windowClosing(WindowEvent e){
+				int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close TMS?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+				if(confirm == 0){
+					try {
+						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					System.exit(0);
+				}
+			}
+		};
+		
+		addWindowListener(exitListener);
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
@@ -66,7 +87,12 @@ public class DateSearchScreen extends JFrame {
 		generateInvoiceButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				generateInvoice();
+				try {
+					generateInvoice();
+				} catch (ClassNotFoundException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -166,7 +192,7 @@ public class DateSearchScreen extends JFrame {
 		}
 	}
 
-	public void generateInvoice() {
+	public void generateInvoice() throws ClassNotFoundException, SQLException {
 		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null);
 		setVisible(false);
 		dispose();

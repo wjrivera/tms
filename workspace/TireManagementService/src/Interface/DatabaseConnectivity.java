@@ -1,5 +1,11 @@
 package Interface;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +23,7 @@ import utilities.Vehicle;
 public class DatabaseConnectivity implements Serializable {
 
 	private static DatabaseConnectivity instance;
+	public static final String INVOICECOUNT = "invoiceCount.tmscf";
 	Connection conn;
 
 	private DatabaseConnectivity() throws ClassNotFoundException, SQLException {
@@ -28,7 +35,6 @@ public class DatabaseConnectivity implements Serializable {
 				+ "\\tms;mv_store=false");
 
 		createDatabase();
-
 	}
 
 	public void loadDatabase() {
@@ -43,7 +49,8 @@ public class DatabaseConnectivity implements Serializable {
 				+ "city VARCHAR(25)," + "state VARCHAR(20),"
 				+ "zip VARCHAR(15)," + "CONSTRAINT pk_id PRIMARY KEY(id));"
 				+ "CREATE TABLE IF NOT EXISTS invoice(" + "invoice_num INT,"
-				+ "client_id VARCHAR(50)," + "date DATE,"
+				+ "client_id VARCHAR(50)," + "vehicle_id VARCHAR(50),"
+				+ "bill_to VARCHAR(50)," + "date DATE,"
 				+ "CONSTRAINT pk_invoice PRIMARY KEY(invoice_num,"
 				+ "client_id),"
 				+ "CONSTRAINT fk_client_id FOREIGN KEY(client_id)"
@@ -187,12 +194,17 @@ public class DatabaseConnectivity implements Serializable {
 
 	public void addInvoice(Invoice i) throws SQLException {
 		String addInvoice = "INSERT INTO invoice"
-				+ "(invoiceNum, client_id,date)" + "VALUES (?,?,?);";
+				+ "(invoice_num, client_id, vehicle_id, bill_to, date)"
+				+ "VALUES (?,?,?,?,?);";
 
 		PreparedStatement addInvoiceStatement = conn
 				.prepareStatement(addInvoice);
 		addInvoiceStatement.setInt(1, i.getInvoiceNumber());
 		addInvoiceStatement.setString(2, i.getClientId().toString());
+		addInvoiceStatement.setString(3, i.getVehicle().getId().toString());
+		addInvoiceStatement.setString(4, i.getBillTo());
+		addInvoiceStatement
+				.setDate(5, new java.sql.Date(i.getDate().getTime()));
 
 		addInvoiceStatement.executeUpdate();
 
@@ -268,4 +280,40 @@ public class DatabaseConnectivity implements Serializable {
 		return returnList;
 	}
 
+	public void saveInvoiceCount(int invNum) throws IOException {
+
+		String content = "" + invNum;
+
+		File file = new File(System.getProperty("user.home") + "\\"
+				+ INVOICECOUNT);
+
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file.getAbsoluteFile());
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(content);
+		bw.close();
+	}
+
+	public void setInvoiceCount() throws IOException {
+
+		int count = 0;
+
+		BufferedReader br = null;
+
+		String line;
+
+		br = new BufferedReader(new FileReader(System.getProperty("user.home")
+				+ "\\" + INVOICECOUNT));
+
+		while ((line = br.readLine()) != null) {
+			count = Integer.parseInt(line);
+		}
+
+		System.out.println("Next Invoice Number is " + count);
+		Invoice.NextInvoiceNumber = count;
+
+	}
 }

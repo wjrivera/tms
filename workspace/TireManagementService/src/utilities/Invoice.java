@@ -1,25 +1,28 @@
 package utilities;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class Invoice {
 
-	public static final Integer NextInvoiceNumber = 1000;
+	public static Integer NextInvoiceNumber = 1000;
 	private Integer invoiceNumber;
 	private Client client;
 	private UUID clientId;
-	private List<Job> jobs = new ArrayList<Job>();
+	private List<Job> jobs;
 	private Date date;
 	private Vehicle vehicle;
+	private String billTo;
 
-	public Invoice(Client c, UUID id, Date d, Vehicle v) {
+	public Invoice(Client c, UUID id, Date d, Vehicle v, List<Job> js, String bt) {
+		invoiceNumber = NextInvoiceNumber++;
 		client = c;
 		clientId = id;
 		date = d;
 		vehicle = v;
+		jobs = js;
+		billTo = bt;
 	}
 
 	public Vehicle getVehicle() {
@@ -72,6 +75,14 @@ public class Invoice {
 
 	public void setInvoiceNumber(Integer invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
+	}
+
+	public String getBillTo() {
+		return billTo;
+	}
+
+	public void setBillTo(String billTo) {
+		this.billTo = billTo;
 	}
 
 }

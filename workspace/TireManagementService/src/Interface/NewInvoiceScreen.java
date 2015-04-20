@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
@@ -18,6 +20,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import utilities.Client;
+import utilities.Job;
+import utilities.Tire;
 import utilities.Vehicle;
 
 public class NewInvoiceScreen extends JPanel {
@@ -26,16 +30,22 @@ public class NewInvoiceScreen extends JPanel {
 
 	public JButton addVehicle, removeVehicle, addNewClient, addJob, removeJob;
 	public JTextField name, email, phoneNumber, address, city, state, zip;
-	private JLabel n, e, p, a, c, s, z, selectedVehicle;
-	private JScrollPane vehiclesScroll;
+	private JLabel n, e, p, a, c, s, z, selectedVehicle, jobsTotal;
+	private JScrollPane vehiclesScroll, jobsScroll;
 	private VehicleListModel vLM;
-	private JList vehiclesList;
-	private Client client;
+	public Vehicle currentVehicle;
+	private JobsListModel jLM;
+	private JList vehiclesList, jobsList;
+	public Client client;
 	private NewCustomerScreen newCust;
+	public List<Job> jobs;
+	public List<Tire> tires;
 
 	public NewInvoiceScreen(Client cl) {
 
 		client = cl;
+
+		jobs = new ArrayList<Job>();
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -75,7 +85,7 @@ public class NewInvoiceScreen extends JPanel {
 		removeVehicle = new JButton("Remove Vehicle");
 		addJob = new JButton("Add Job");
 		removeJob = new JButton("Remove Job");
-		
+
 		addVehicle.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -90,10 +100,30 @@ public class NewInvoiceScreen extends JPanel {
 			}
 		});
 
+		addJob.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				addJob();
+			}
+		});
+
+		removeJob.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				removeJob();
+			}
+		});
+
 		vehiclesScroll = getScrollPane();
+		jobsScroll = getJobsPane();
+
+		JLabel billingInfo = new JLabel("Billing Information");
+		billingInfo.setFont(new Font("Serif", Font.BOLD, 17));
+		add(billingInfo);
+		add(new JLabel(" "));
 
 		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(9, 2, 15, 15));
+		infoPanel.setLayout(new GridLayout(8, 2, 15, 15));
 
 		infoPanel.add(n);
 		infoPanel.add(name);
@@ -109,13 +139,66 @@ public class NewInvoiceScreen extends JPanel {
 		infoPanel.add(state);
 		infoPanel.add(z);
 		infoPanel.add(zip);
-		infoPanel.add(addVehicle);
-		infoPanel.add(removeVehicle);
+
+		JLabel vehicleLabel = new JLabel("Vehicle");
+		vehicleLabel.setFont(new Font("Serif", Font.BOLD, 17));
+
+		JPanel vehicleButtons = new JPanel(new GridLayout(1, 2, 15, 15));
+		vehicleButtons.add(addVehicle);
+		vehicleButtons.add(removeVehicle);
 
 		add(infoPanel);
+
+		add(vehicleLabel);
+		add(new JLabel(" "));
+		add(vehicleButtons);
+
 		add(vehiclesScroll);
 		add(selectedVehicle);
+		add(new JLabel(" "));
 
+		JLabel jobsLabel = new JLabel("Jobs");
+		jobsLabel.setFont(new Font("Serif", Font.BOLD, 17));
+		add(jobsLabel);
+
+		JPanel jobsPanel = new JPanel();
+		JPanel jobButtons = new JPanel(new GridLayout(1, 2, 15, 15));
+		jobButtons.add(addJob);
+		jobButtons.add(removeJob);
+
+		jobsPanel.add(jobButtons);
+		add(jobsPanel);
+		add(jobsScroll);
+
+		jobsTotal = new JLabel("Jobs Total: $" + getJobsTotal());
+		jobsTotal.setFont(new Font("Serif", Font.PLAIN, 17));
+
+		add(jobsTotal);
+
+	}
+
+	private void updateTotals() {
+
+		jobsTotal.setText("Jobs Total: $" + getJobsTotal());
+
+	}
+
+	private double getJobsTotal() {
+		double tot = 0;
+
+		for (Job j : jobs) {
+			tot += j.getPrice();
+		}
+
+		return tot;
+	}
+
+	private double getTireTotal() {
+		double tot = 0;
+
+		// TODO get tires total
+
+		return tot;
 	}
 
 	private JScrollPane getScrollPane() {
@@ -125,7 +208,7 @@ public class NewInvoiceScreen extends JPanel {
 		vLM = new VehicleListModel(client.getVehicle());
 
 		vehiclesList = new JList(vLM);
-		vehiclesList.setFont(new Font("Serif", Font.PLAIN, 13));
+		vehiclesList.setFont(new Font("Serif", Font.PLAIN, 15));
 		vehiclesList.setCellRenderer(new DefaultListCellRenderer());
 		vehiclesList.setVisibleRowCount(3);
 
@@ -135,6 +218,9 @@ public class NewInvoiceScreen extends JPanel {
 				if (!lse.getValueIsAdjusting()) {
 					selectedVehicle.setText("Selected Vehicle: "
 							+ vehiclesList.getSelectedValue().toString());
+					currentVehicle = (Vehicle) vehiclesList.getSelectedValue();
+					System.out.println("Currently is :"
+							+ currentVehicle.toString());
 				}
 			}
 		});
@@ -144,7 +230,23 @@ public class NewInvoiceScreen extends JPanel {
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		return temp;
+	}
 
+	private JScrollPane getJobsPane() {
+
+		JScrollPane temp;
+
+		jLM = new JobsListModel(jobs);
+
+		jobsList = new JList(jLM);
+		jobsList.setFont(new Font("Serif", Font.PLAIN, 13));
+		jobsList.setCellRenderer(new DefaultListCellRenderer());
+		jobsList.setVisibleRowCount(5);
+
+		temp = new JScrollPane(jobsList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+		return temp;
 	}
 
 	private void addVehicle() {
@@ -169,6 +271,29 @@ public class NewInvoiceScreen extends JPanel {
 
 		// TODO Remove vehicles from client
 		vLM.remove(vehiclesList.getSelectedIndex());
+	}
+
+	private void addJob() {
+
+		NewJobScreen jobInfo = new NewJobScreen();
+
+		int result = JOptionPane.showConfirmDialog(null, jobInfo,
+				NewJobScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			Job temp = new Job(jobInfo.title.getText(),
+					Double.parseDouble(jobInfo.price.getText()));
+			jLM.add(temp);
+			jobs.add(temp);
+			updateTotals();
+		}
+	}
+
+	private void removeJob() {
+		jLM.remove(jobsList.getSelectedIndex());
+		jobs.remove(jobsList.getSelectedIndex());
+		updateTotals();
 	}
 
 	class NewVehicleScreen extends JPanel {
@@ -198,6 +323,56 @@ public class NewInvoiceScreen extends JPanel {
 
 			setVisible(true);
 
+		}
+	}
+
+	class NewJobScreen extends JPanel {
+
+		public static final String TITLE = "Add New Job";
+		public JTextField title, price;
+		private JLabel tit, pri;
+
+		public NewJobScreen() {
+
+			setLayout(new GridLayout(2, 2, 15, 15));
+
+			title = new JTextField();
+			price = new JTextField();
+
+			tit = new JLabel("Job Name:");
+			pri = new JLabel("Price $");
+
+			add(tit);
+			add(title);
+			add(pri);
+			add(price);
+
+			setVisible(true);
+		}
+	}
+
+	class NewTireScreen extends JPanel {
+
+		public static final String TITLE = "Add New Tire";
+		public JTextField title, price;
+		private JLabel tit, pri;
+
+		public NewTireScreen() {
+
+			setLayout(new GridLayout(2, 2, 15, 15));
+
+			title = new JTextField();
+			price = new JTextField();
+
+			tit = new JLabel("Job Name:");
+			pri = new JLabel("Price $");
+
+			add(tit);
+			add(title);
+			add(pri);
+			add(price);
+
+			setVisible(true);
 		}
 	}
 }
