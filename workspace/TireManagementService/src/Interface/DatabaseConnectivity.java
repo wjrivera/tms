@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import utilities.Client;
 import utilities.Invoice;
+import utilities.Job;
 import utilities.Vehicle;
 
 public class DatabaseConnectivity implements Serializable {
@@ -171,7 +172,7 @@ public class DatabaseConnectivity implements Serializable {
 	}
 
 	public void addClient(Client c) throws SQLException {
-		String addClient = "INSERT INTO client"
+		final String addClient = "INSERT INTO client"
 				+ "(id, firstName, lastName, email, phone_number, address, city, state, zip)"
 				+ "VALUES(?,?,?,?,?,?,?,?,?);";
 
@@ -256,12 +257,21 @@ public class DatabaseConnectivity implements Serializable {
 		return instance;
 	}
 
-	public List<Invoice> getInvoicesByDate() throws SQLException {
+	public List<Invoice> getInvoicesByDate(String clientId) throws SQLException {
 		List<Invoice> returnList = new ArrayList<Invoice>();
 
-		String retrieveSQL = "SELECT * FROM invoice " + "ORDER BY date";
+		String cId = "";
+
+		if (clientId != null) {
+			cId = clientId;
+		}
+
+		String retrieveSQL = "SELECT * FROM invoice "
+				+ "WHERE client_id LIKE ? " + "ORDER BY date";
 
 		PreparedStatement retrieveInvoices = conn.prepareStatement(retrieveSQL);
+
+		retrieveInvoices.setString(1, clientId);
 
 		ResultSet rs = retrieveInvoices.executeQuery();
 
@@ -270,14 +280,63 @@ public class DatabaseConnectivity implements Serializable {
 					.getString("invoice_num")));
 			Client c = getClientFromId(UUID.fromString(rs
 					.getString("client_id")));
-
+			temp.setBillTo(rs.getString("bill_to"));
+			temp.setVehicle(getVehicleFromId(rs.getString("vehicle_id")));
 			temp.setClient(c);
 			temp.setDate(rs.getDate("date"));
+
+			temp.setJobs(getJobsFromInvNum(temp.getInvoiceNumber()));
 
 			returnList.add(temp);
 		}
 
 		return returnList;
+	}
+
+	public List<Job> getJobsFromInvNum(int invNum) throws SQLException {
+
+		List<Job> jobs = new ArrayList<Job>();
+
+		String retrieveSQL = "SELECT * FROM jobs "
+				+ "WHERE invoice_num LIKE ? ;";
+
+		PreparedStatement retrieveJobs = conn.prepareStatement(retrieveSQL);
+
+		retrieveJobs.setInt(1, invNum);
+
+		ResultSet rs = retrieveJobs.executeQuery();
+
+		while (rs.next()) {
+
+			Job temp = new Job(rs.getString("job_name"), rs.getDouble("price"));
+
+			jobs.add(temp);
+
+		}
+
+		return jobs;
+
+	}
+
+	public Vehicle getVehicleFromId(String veh_id) throws SQLException {
+
+		Vehicle temp = null;
+
+		String retrieveSQL = "SELECT * FROM vehicle " + "WHERE id LIKE ?;";
+
+		PreparedStatement retrieveVehicle = conn.prepareStatement(retrieveSQL);
+
+		retrieveVehicle.setString(1, veh_id);
+
+		ResultSet rs = retrieveVehicle.executeQuery();
+
+		while (rs.next()) {
+			temp = new Vehicle(rs.getInt("year"), rs.getString("make"),
+					rs.getString("model"), UUID.fromString(veh_id));
+		}
+
+		return temp;
+
 	}
 
 	public void saveInvoiceCount(int invNum) throws IOException {

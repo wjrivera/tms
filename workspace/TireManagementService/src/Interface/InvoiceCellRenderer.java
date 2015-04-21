@@ -2,6 +2,7 @@ package Interface;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JLabel;
@@ -18,13 +19,17 @@ public class InvoiceCellRenderer extends JPanel implements
 	JLabel name = new JLabel(" ");
 	JLabel date = new JLabel(" ");
 	JLabel invoiceNum = new JLabel(" ");
+	JLabel vehicle = new JLabel(" ");
 
 	public InvoiceCellRenderer() {
+
+		invoiceNum.setFont(new Font("Serif", Font.BOLD, 15));
+		name.setFont(new Font("Serif", Font.BOLD, 15));
 		setLayout(new GridLayout(2, 2, 15, 15));
 		add(invoiceNum);
 		add(name);
 		add(date);
-		add(new JLabel(" "));
+		add(vehicle);
 	}
 
 	@Override
@@ -40,6 +45,7 @@ public class InvoiceCellRenderer extends JPanel implements
 		name.setText(value.getClient().toString());
 		invoiceNum.setText(value.getInvoiceNumber().toString());
 		date.setText(value.getDate().toString());
+		vehicle.setText(value.getVehicle().toString());
 
 		return this;
 	}

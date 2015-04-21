@@ -16,8 +16,8 @@ public class Vehicle {
 		model = mod;
 		id = UUID.randomUUID();
 	}
-	
-	public Vehicle(int y, String mak, String mod, UUID id){
+
+	public Vehicle(int y, String mak, String mod, UUID id) {
 		year = y;
 		make = mak;
 		model = mod;
@@ -56,13 +56,13 @@ public class Vehicle {
 		this.notes = notes;
 	}
 
-	public UUID getId(){
+	public UUID getId() {
 		return id;
 	}
-	
-	public String toString(){
-		
+
+	public String toString() {
+
 		return year + " " + make + " " + model;
 	}
-	
+
 }

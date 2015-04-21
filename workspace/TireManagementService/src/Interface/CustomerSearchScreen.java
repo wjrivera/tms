@@ -83,10 +83,8 @@ public class CustomerSearchScreen extends JFrame {
 				try {
 					backToMain();
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -98,7 +96,6 @@ public class CustomerSearchScreen extends JFrame {
 				try {
 					addCustomer();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -109,7 +106,6 @@ public class CustomerSearchScreen extends JFrame {
 				try {
 					generateInvoice();
 				} catch (ClassNotFoundException | SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -214,7 +210,7 @@ public class CustomerSearchScreen extends JFrame {
 
 			dbc.addClient(temp);
 
-			jobs = getScrollPane();
+			cLM.add(temp);
 		}
 
 	}
@@ -235,6 +231,12 @@ public class CustomerSearchScreen extends JFrame {
 
 		public ClientListModel(List<Client> clients) {
 			this.clients = clients;
+		}
+
+		public void add(Client c) {
+			if (clients.add(c)) {
+				fireContentsChanged(this, 0, getSize());
+			}
 		}
 
 		@Override

@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -35,11 +36,17 @@ public class DateSearchScreen extends JFrame {
 
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
 	JList invoicesList;
-	JScrollPane jobs;
+	JScrollPane invoicesSP;
+	Client client;
 
-	public DateSearchScreen() throws ClassNotFoundException, SQLException {
+	public DateSearchScreen(Client c) throws ClassNotFoundException,
+			SQLException {
 
 		dbc = DatabaseConnectivity.getInstance();
+
+		if (c != null) {
+			client = c;
+		}
 
 		invoices = new ArrayList<Invoice>();
 
@@ -127,16 +134,15 @@ public class DateSearchScreen extends JFrame {
 
 		// ScrollBar
 		JPanel jobContainer = new JPanel();
-		jobs = new JScrollPane(jobContainer,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		invoicesSP = getScrollPane();
+		invoicesSP.getViewport().setBackground(Color.WHITE);
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
 		topLevelCont.setLayout(new GridLayout(2, 1));
 
 		topLevelCont.add(topContainer);
-		topLevelCont.add(jobs);
+		topLevelCont.add(invoicesSP);
 
 		add(topLevelCont);
 
@@ -149,7 +155,12 @@ public class DateSearchScreen extends JFrame {
 
 	private JScrollPane getScrollPane() throws SQLException {
 
-		invoices = dbc.getInvoicesByDate();
+		String searchTerm = "%";
+		if (client != null) {
+			searchTerm = client.getClientId().toString();
+		}
+
+		invoices = dbc.getInvoicesByDate(searchTerm);
 
 		invoicesList = new JList(invoices.toArray());
 		invoicesList.setFont(new Font("Serif", Font.BOLD, 20));
@@ -190,16 +201,19 @@ public class DateSearchScreen extends JFrame {
 			temp.setZip(customerInfo.zip.getText());
 
 			dbc.addClient(temp);
-
-			jobs = getScrollPane();
 		}
 	}
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
-		
-		//TODO second parameter should not be null;
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
-				null);
+
+		// TODO second parameter should not be null;
+		if (invoicesList.getSelectedValue() != null) {
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
+					(Invoice) invoicesList.getSelectedValue());
+		} else {
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
+					null);
+		}
 		setVisible(false);
 		dispose();
 	}

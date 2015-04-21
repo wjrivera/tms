@@ -216,7 +216,7 @@ public class StartScreen extends JFrame {
 
 	public void searchByDate(Date d) throws ClassNotFoundException,
 			SQLException {
-		DateSearchScreen newInstance = new DateSearchScreen();
+		DateSearchScreen newInstance = new DateSearchScreen(null);
 		setVisible(false);
 		dispose();
 	}

@@ -45,12 +45,15 @@ public class NewInvoiceScreen extends JPanel {
 
 	public NewInvoiceScreen(Client cl, Invoice in) {
 
-		if (in != null) {
-			i = in;
-		}
 		client = cl;
 
 		jobs = new ArrayList<Job>();
+
+		if (in != null) {
+			System.out.println("in is not null");
+			i = in;
+			jobs = in.getJobs();
+		}
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -215,7 +218,7 @@ public class NewInvoiceScreen extends JPanel {
 
 		JScrollPane temp;
 
-		vLM = new VehicleListModel(client.getVehicle());
+		vLM = new VehicleListModel(i.getClient().getVehicle());
 
 		vehiclesList = new JList(vLM);
 		vehiclesList.setFont(new Font("Serif", Font.PLAIN, 15));
