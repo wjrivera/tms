@@ -172,7 +172,7 @@ public class StartScreen extends JFrame {
 		setResizable(false);
 
 		//setSize(700, 450);
-		setSize(1400, 900);
+		setSize(1100, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
 
