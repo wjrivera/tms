@@ -53,6 +53,8 @@ public class NewInvoiceScreen extends JPanel {
 			System.out.println("in is not null");
 			i = in;
 			jobs = in.getJobs();
+		} else {
+			System.out.println("in is null");
 		}
 
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -125,8 +127,14 @@ public class NewInvoiceScreen extends JPanel {
 		vehiclesScroll = getScrollPane();
 		jobsScroll = getJobsPane();
 
-		JLabel invoiceNumber = new JLabel("Invoice Number "
-				+ Invoice.NextInvoiceNumber);
+		JLabel invoiceNumber;
+
+		if (in == null) {
+			invoiceNumber = new JLabel("Invoice Number "
+					+ Invoice.NextInvoiceNumber);
+		} else {
+			invoiceNumber = new JLabel("Invoice Number " + i.getInvoiceNumber());
+		}
 		invoiceNumber.setFont(new Font("Serif", Font.BOLD, 20));
 
 		JLabel billingInfo = new JLabel("Billing Information");
@@ -218,7 +226,11 @@ public class NewInvoiceScreen extends JPanel {
 
 		JScrollPane temp;
 
-		vLM = new VehicleListModel(i.getClient().getVehicle());
+		if (i != null) {
+			vLM = new VehicleListModel(i.getClient().getVehicle());
+		} else {
+			vLM = new VehicleListModel(client.getVehicle());
+		}
 
 		vehiclesList = new JList(vLM);
 		vehiclesList.setFont(new Font("Serif", Font.PLAIN, 15));

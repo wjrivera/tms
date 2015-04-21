@@ -21,6 +21,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
@@ -34,7 +35,7 @@ public class DateSearchScreen extends JFrame {
 
 	List<Invoice> invoices;
 
-	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
+	JButton backToMainButton, editInvoiceButton, generateInvoiceButton;
 	JList invoicesList;
 	JScrollPane invoicesSP;
 	Client client;
@@ -77,8 +78,8 @@ public class DateSearchScreen extends JFrame {
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
-		addCustomerButton = new JButton("Add Customer");
-		generateInvoiceButton = new JButton("Generate Invoice");
+		editInvoiceButton = new JButton("Edit Selected Invoice");
+		generateInvoiceButton = new JButton("Generate New Invoice");
 
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
@@ -90,6 +91,16 @@ public class DateSearchScreen extends JFrame {
 					e.printStackTrace();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		editInvoiceButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					editInvoice();
+				} catch (ClassNotFoundException | SQLException e) {
 					e.printStackTrace();
 				}
 			}
@@ -107,7 +118,7 @@ public class DateSearchScreen extends JFrame {
 		});
 
 		buttonsPanel.add(backToMainButton);
-		buttonsPanel.add(addCustomerButton);
+		buttonsPanel.add(editInvoiceButton);
 		buttonsPanel.add(generateInvoiceButton);
 
 		// set up the title
@@ -206,15 +217,74 @@ public class DateSearchScreen extends JFrame {
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
 
+		JTextField searchField = new JTextField("");
+
+		int newCustomer = JOptionPane.showConfirmDialog(this,
+				"Is this an existing client?");
+
+		if (newCustomer == JOptionPane.YES_OPTION) {
+			int searchTerm = JOptionPane.showConfirmDialog(null, searchField,
+					"Enter Search Term", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+
+			if (searchTerm == JOptionPane.OK_OPTION) {
+				try {
+					// TODO the following line should be changed later
+					CustomerSearchScreen.setSearchTerm(searchField.getText());
+					CustomerSearchScreen newInstance = new CustomerSearchScreen();
+				} catch (ClassNotFoundException | SQLException e) {
+					e.printStackTrace();
+				}
+				setVisible(false);
+				dispose();
+			}
+		} else if (newCustomer == JOptionPane.CANCEL_OPTION){
+			//DO NOTHING;
+		}	else {
+		
+
+			NewCustomerScreen customerInfo = new NewCustomerScreen();
+
+			Client temp = new Client();
+
+			int result = JOptionPane.showConfirmDialog(null, customerInfo,
+					NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+
+			if (result == JOptionPane.OK_OPTION) {
+
+				temp.setFirstName(customerInfo.firstName.getText());
+				temp.setLastName(customerInfo.lastName.getText());
+				temp.setEmail(customerInfo.email.getText());
+				temp.setPhoneNumber(customerInfo.phoneNumber.getText());
+				temp.setAddress(customerInfo.address.getText());
+				temp.setCity(customerInfo.city.getText());
+				temp.setState(customerInfo.state.getText());
+				temp.setZip(customerInfo.zip.getText());
+				temp.setVehicle(customerInfo.vehicles);
+
+				dbc.addClient(temp);
+
+				GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(
+						temp, null);
+				setVisible(false);
+				dispose();
+			}
+		}
+	}
+
+	public void editInvoice() throws ClassNotFoundException, SQLException {
+
 		// TODO second parameter should not be null;
 		if (invoicesList.getSelectedValue() != null) {
-			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(
+					((Invoice) invoicesList.getSelectedValue()).getClient(),
 					(Invoice) invoicesList.getSelectedValue());
+			setVisible(false);
+			dispose();
 		} else {
-			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(null,
-					null);
+			JOptionPane.showMessageDialog(null, "Please Select an Invoice!");
 		}
-		setVisible(false);
-		dispose();
+
 	}
 }

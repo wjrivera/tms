@@ -93,6 +93,7 @@ public class DatabaseConnectivity implements Serializable {
 			c.setCity(rs.getString("city"));
 			c.setState(rs.getString("state"));
 			c.setZip(rs.getString("zip"));
+			c.setVehicle(getVehiclesFromClientId(c.getClientId().toString()));
 		}
 
 		return c;
@@ -164,6 +165,7 @@ public class DatabaseConnectivity implements Serializable {
 
 		while (rs.next()) {
 			name = rs.getString("name");
+
 		}
 
 		System.out.println(name);
@@ -285,6 +287,8 @@ public class DatabaseConnectivity implements Serializable {
 			temp.setClient(c);
 			temp.setDate(rs.getDate("date"));
 
+			System.out.println("in here");
+
 			temp.setJobs(getJobsFromInvNum(temp.getInvoiceNumber()));
 
 			returnList.add(temp);
@@ -312,6 +316,10 @@ public class DatabaseConnectivity implements Serializable {
 
 			jobs.add(temp);
 
+		}
+
+		for (Job j : jobs) {
+			System.out.println(j.toString());
 		}
 
 		return jobs;
