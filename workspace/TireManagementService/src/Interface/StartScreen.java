@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -70,8 +71,9 @@ public class StartScreen extends JFrame {
 			}
 		}
 
-		logo = new ImageIcon(System.getProperty("user.dir")
-				+ "\\resources\\logo.png");
+		URL imageURL = StartScreen.class.getResource("/resources/logo.png");
+
+		logo = new ImageIcon(imageURL);
 
 		final DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
 
