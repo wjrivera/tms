@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -39,6 +40,8 @@ public class GenerateInvoiceScreen extends JFrame {
 	public GenerateInvoiceScreen(Client c, Invoice in)
 			throws ClassNotFoundException, SQLException {
 
+		setBackground(new Color(129, 159, 252));
+
 		if (in != null) {
 			i = in;
 		}
@@ -56,7 +59,7 @@ public class GenerateInvoiceScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+						dbc.saveLastState(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -70,10 +73,14 @@ public class GenerateInvoiceScreen extends JFrame {
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(new Color(129, 159, 252));
 		buttonsPanel.setLayout(new GridLayout(1, 5, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
 		addInvoice = new JButton("Add Invoice");
+
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		addInvoice.setBackground(new Color(59, 89, 182));
 
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
@@ -93,24 +100,34 @@ public class GenerateInvoiceScreen extends JFrame {
 			}
 		});
 
-		buttonsPanel.add(new JPanel());
+		JPanel filler = new JPanel();
+		filler.setBackground(new Color(129, 159, 252));
+		JPanel filler2 = new JPanel();
+		filler2.setBackground(new Color(129, 159, 252));
+		JPanel filler3 = new JPanel();
+		filler3.setBackground(new Color(129, 159, 252));
+
+		buttonsPanel.add(filler);
 		buttonsPanel.add(addInvoice);
-		buttonsPanel.add(new JPanel());
+		buttonsPanel.add(filler2);
 		buttonsPanel.add(backToMainButton);
-		buttonsPanel.add(new JPanel());
+		buttonsPanel.add(filler3);
 
 		// set up the title
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
+		titleLabel.setBackground(new Color(129, 159, 252));
 		titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
 
 		// container for title and buttons
 		JPanel titleAndButtonCont = new JPanel();
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
 		titleAndButtonCont.add(titleLabel);
 		titleAndButtonCont.add(buttonsPanel);
 
 		// borderlayout to organize top half
 		JPanel topContainer = new JPanel();
+		topContainer.setBackground(new Color(129, 159, 252));
 		topContainer.setLayout(new BorderLayout());
 
 		// fillers
@@ -129,9 +146,11 @@ public class GenerateInvoiceScreen extends JFrame {
 
 		invoice.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 10,
 				10));
+		invoice.setBackground(Color.WHITE);
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
+		topLevelCont.setBackground(new Color(129, 159, 252));
 		topLevelCont.setLayout(new GridLayout(2, 1));
 
 		topLevelCont.add(topContainer);
@@ -148,11 +167,14 @@ public class GenerateInvoiceScreen extends JFrame {
 
 	public void addInvoice() throws SQLException {
 
-		i = new Invoice(client, client.getClientId(), new Date(),
-				screen.currentVehicle, screen.jobs, screen.name.getText());
-
-		dbc.addInvoice(i);
-
+		if (screen.currentVehicle == null) {
+			JOptionPane.showMessageDialog(null, "Please Select a Vehicle!");
+		} else {
+			i = new Invoice(screen.i.getInvoiceNumber(), client,
+					client.getClientId(), new Date(), screen.currentVehicle,
+					screen.jobs, screen.name.getText());
+			dbc.addInvoice(i);
+		}
 	}
 
 	public void backToMain() {

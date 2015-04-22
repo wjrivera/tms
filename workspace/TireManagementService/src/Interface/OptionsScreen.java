@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,8 @@ public class OptionsScreen extends JFrame {
 
 		dbc = DatabaseConnectivity.getInstance();
 
+		setBackground(new Color(129, 159, 252));
+
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		WindowListener exitListener = new WindowAdapter() {
 			@Override
@@ -44,7 +47,7 @@ public class OptionsScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+						dbc.saveLastState(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -58,6 +61,7 @@ public class OptionsScreen extends JFrame {
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(new Color(129, 159, 252));
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
@@ -74,9 +78,14 @@ public class OptionsScreen extends JFrame {
 			}
 		});
 
-		buttonsPanel.add(new JPanel());
+		JPanel filler = new JPanel();
+		filler.setBackground(new Color(129, 159, 252));
+		JPanel filler2 = new JPanel();
+		filler2.setBackground(new Color(129, 159, 252));
+
+		buttonsPanel.add(filler);
 		buttonsPanel.add(backToMainButton);
-		buttonsPanel.add(new JPanel());
+		buttonsPanel.add(filler2);
 
 		// set up the title
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
@@ -84,12 +93,14 @@ public class OptionsScreen extends JFrame {
 
 		// container for title and buttons
 		JPanel titleAndButtonCont = new JPanel();
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
 		titleAndButtonCont.add(titleLabel);
 		titleAndButtonCont.add(buttonsPanel);
 
 		// borderlayout to organize top half
 		JPanel topContainer = new JPanel();
+		topContainer.setBackground(new Color(129, 159, 252));
 		topContainer.setLayout(new BorderLayout());
 
 		// fillers
@@ -102,6 +113,7 @@ public class OptionsScreen extends JFrame {
 
 		// Bottom Panel with Buttons
 		JPanel botButtonsPanel = new JPanel();
+		botButtonsPanel.setBackground(new Color(129, 159, 252));
 		botButtonsPanel.setLayout(new GridLayout(2, 2, 15, 15));
 
 		editStoreButton = new JButton("Edit Store Info");
@@ -168,18 +180,34 @@ public class OptionsScreen extends JFrame {
 	}
 
 	public void editStoreInfo() {
+		// close the current window()
+		EditStoreInfo editStoreInfo = new EditStoreInfo();
+		setVisible(false);
+		dispose();
 
 	}
 
 	public void editCurrency() {
+		// close the current window()
+		EditCurrency editCurrency = new EditCurrency();
+		setVisible(false);
+		dispose();
 
 	}
 
 	public void setPaymentInfo() {
+		// close the current window()
+		SetPaymentInfo setPaymentInfo = new SetPaymentInfo();
+		setVisible(false);
+		dispose();
 
 	}
 
 	public void addInventory() {
+		// close the current window()
+		AddInventory addInventory = new AddInventory();
+		setVisible(false);
+		dispose();
 
 	}
 }

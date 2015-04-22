@@ -25,6 +25,16 @@ public class Invoice {
 		billTo = bt;
 	}
 
+	public Invoice(int i, Client c, UUID id, Date d, Vehicle v, List<Job> js, String bt) {
+		invoiceNumber = i;
+		client = c;
+		clientId = id;
+		date = d;
+		vehicle = v;
+		jobs = js;
+		billTo = bt;
+	}
+	
 	public Vehicle getVehicle() {
 		return vehicle;
 	}

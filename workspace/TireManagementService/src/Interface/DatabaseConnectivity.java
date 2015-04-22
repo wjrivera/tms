@@ -120,7 +120,7 @@ public class DatabaseConnectivity implements Serializable {
 
 	public void addVehicle(Vehicle v, String clientId) throws SQLException {
 
-		final String addVehicle = "INSERT INTO vehicle"
+		final String addVehicle = "MERGE INTO vehicle"
 				+ "(id, client_id, year, make, model)" + "VALUES (?,?,?,?,?);";
 
 		PreparedStatement addVehicleStatement = conn
@@ -137,7 +137,7 @@ public class DatabaseConnectivity implements Serializable {
 	public void addVehicles(List<Vehicle> vehicles, String clientId)
 			throws SQLException {
 
-		final String addVehicles = "INSERT INTO vehicle"
+		final String addVehicles = "MERGE INTO vehicle"
 				+ "(id, client_id, year, make, model)" + "VALUES (?,?,?,?,?);";
 
 		for (Vehicle v : vehicles) {
@@ -174,7 +174,7 @@ public class DatabaseConnectivity implements Serializable {
 	}
 
 	public void addClient(Client c) throws SQLException {
-		final String addClient = "INSERT INTO client"
+		final String addClient = "MERGE INTO client"
 				+ "(id, firstName, lastName, email, phone_number, address, city, state, zip)"
 				+ "VALUES(?,?,?,?,?,?,?,?,?);";
 
@@ -196,7 +196,7 @@ public class DatabaseConnectivity implements Serializable {
 	}
 
 	public void addInvoice(Invoice i) throws SQLException {
-		String addInvoice = "INSERT INTO invoice"
+		String addInvoice = "MERGE INTO invoice"
 				+ "(invoice_num, client_id, vehicle_id, bill_to, date)"
 				+ "VALUES (?,?,?,?,?);";
 
@@ -211,12 +211,34 @@ public class DatabaseConnectivity implements Serializable {
 
 		addInvoiceStatement.executeUpdate();
 
+		addJobs(i.getJobs(), i.getInvoiceNumber());
+
+	}
+
+	public String getClientIdByName(String name) throws SQLException {
+
+		String clientId = "<>?";
+
+		String retrieveSQL = "SELECT id FROM client "
+				+ "WHERE CONCAT(firstName, ' ',lastName) LIKE ?;";
+
+		PreparedStatement retrieveClientId = conn.prepareStatement(retrieveSQL);
+		retrieveClientId.setString(1, "%" + name + "%");
+
+		ResultSet rs = retrieveClientId.executeQuery();
+
+		while (rs.next()) {
+			clientId = rs.getString("id");
+		}
+
+		System.out.println(name + "'s id is " + clientId);
+
+		return clientId;
+
 	}
 
 	public List<Client> getClientsByName(String name) throws SQLException {
 		List<Client> returnList = new ArrayList<Client>();
-
-		System.out.println(name);
 
 		String retrieveSQL = "SELECT * FROM client "
 				+ "WHERE CONCAT(firstName, ' ',lastName) LIKE ?";
@@ -264,17 +286,22 @@ public class DatabaseConnectivity implements Serializable {
 
 		String cId = "";
 
-		if (clientId != null) {
+		if (clientId != null || clientId != "" || clientId != " ") {
 			cId = clientId;
 		}
 
 		String retrieveSQL = "SELECT * FROM invoice "
-				+ "WHERE client_id LIKE ? " + "ORDER BY date";
+				+ "WHERE client_id LIKE ? " + "ORDER BY date DESC";
 
 		PreparedStatement retrieveInvoices = conn.prepareStatement(retrieveSQL);
 
-		retrieveInvoices.setString(1, clientId);
+		System.out.println("length of search is " + cId.length());
 
+		if (cId.length() <= 1) {
+			retrieveInvoices.setString(1, "%");
+		} else {
+			retrieveInvoices.setString(1, "%" + getClientIdByName(cId) + "%");
+		}
 		ResultSet rs = retrieveInvoices.executeQuery();
 
 		while (rs.next()) {
@@ -286,8 +313,6 @@ public class DatabaseConnectivity implements Serializable {
 			temp.setVehicle(getVehicleFromId(rs.getString("vehicle_id")));
 			temp.setClient(c);
 			temp.setDate(rs.getDate("date"));
-
-			System.out.println("in here");
 
 			temp.setJobs(getJobsFromInvNum(temp.getInvoiceNumber()));
 
@@ -318,12 +343,23 @@ public class DatabaseConnectivity implements Serializable {
 
 		}
 
-		for (Job j : jobs) {
-			System.out.println(j.toString());
-		}
-
 		return jobs;
 
+	}
+
+	public void addJobs(List<Job> jobs, int invNum) throws SQLException {
+		final String addJobs = "MERGE INTO jobs"
+				+ "(invoice_num, job_name, price)" + "VALUES(?,?,?);";
+
+		for (Job j : jobs) {
+
+			PreparedStatement addJobStatement = conn.prepareStatement(addJobs);
+			addJobStatement.setInt(1, invNum);
+			addJobStatement.setString(2, j.getTitle());
+			addJobStatement.setDouble(3, j.getPrice());
+
+			addJobStatement.executeUpdate();
+		}
 	}
 
 	public Vehicle getVehicleFromId(String veh_id) throws SQLException {
@@ -347,7 +383,7 @@ public class DatabaseConnectivity implements Serializable {
 
 	}
 
-	public void saveInvoiceCount(int invNum) throws IOException {
+	public void saveLastState(int invNum) throws IOException {
 
 		String content = "" + invNum;
 
@@ -364,7 +400,7 @@ public class DatabaseConnectivity implements Serializable {
 		bw.close();
 	}
 
-	public void setInvoiceCount() throws IOException {
+	public void getLastState() throws IOException {
 
 		int count = 0;
 
@@ -379,7 +415,9 @@ public class DatabaseConnectivity implements Serializable {
 			count = Integer.parseInt(line);
 		}
 
-		System.out.println("Next Invoice Number is " + count);
+		// TODO get the stored store information and place it on the StoreInfo
+		// class;
+
 		Invoice.NextInvoiceNumber = count;
 
 	}

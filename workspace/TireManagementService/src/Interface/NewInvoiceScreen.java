@@ -1,5 +1,6 @@
 package Interface;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -41,9 +42,11 @@ public class NewInvoiceScreen extends JPanel {
 	private NewCustomerScreen newCust;
 	public List<Job> jobs;
 	public List<Tire> tires;
-	private Invoice i;
+	public Invoice i;
 
 	public NewInvoiceScreen(Client cl, Invoice in) {
+
+		setBackground(Color.WHITE);
 
 		client = cl;
 
@@ -144,6 +147,7 @@ public class NewInvoiceScreen extends JPanel {
 		add(new JLabel(" "));
 
 		JPanel infoPanel = new JPanel();
+		infoPanel.setBackground(Color.WHITE);
 		infoPanel.setLayout(new GridLayout(8, 2, 15, 15));
 
 		infoPanel.add(n);
@@ -165,6 +169,7 @@ public class NewInvoiceScreen extends JPanel {
 		vehicleLabel.setFont(new Font("Serif", Font.BOLD, 17));
 
 		JPanel vehicleButtons = new JPanel(new GridLayout(1, 2, 15, 15));
+		vehicleButtons.setBackground(Color.WHITE);
 		vehicleButtons.add(addVehicle);
 		vehicleButtons.add(removeVehicle);
 
@@ -183,6 +188,7 @@ public class NewInvoiceScreen extends JPanel {
 		add(jobsLabel);
 
 		JPanel jobsPanel = new JPanel();
+		jobsPanel.setBackground(Color.WHITE);
 		JPanel jobButtons = new JPanel(new GridLayout(1, 2, 15, 15));
 		jobButtons.add(addJob);
 		jobButtons.add(removeJob);

@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
@@ -35,18 +36,21 @@ public class DateSearchScreen extends JFrame {
 
 	List<Invoice> invoices;
 
-	JButton backToMainButton, editInvoiceButton, generateInvoiceButton;
-	JList invoicesList;
-	JScrollPane invoicesSP;
-	Client client;
+	private JButton backToMainButton, editInvoiceButton, generateInvoiceButton;
+	private JList invoicesList;
+	private JScrollPane invoicesSP;
+	private Client client;
+	private String searchT = "%";
 
-	public DateSearchScreen(Client c) throws ClassNotFoundException,
+	public DateSearchScreen(String search) throws ClassNotFoundException,
 			SQLException {
+
+		setBackground(new Color(129, 159, 252));
 
 		dbc = DatabaseConnectivity.getInstance();
 
-		if (c != null) {
-			client = c;
+		if (search != null) {
+			searchT = search;
 		}
 
 		invoices = new ArrayList<Invoice>();
@@ -61,7 +65,7 @@ public class DateSearchScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+						dbc.saveLastState(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -75,6 +79,7 @@ public class DateSearchScreen extends JFrame {
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(new Color(129, 159, 252));
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
@@ -117,16 +122,22 @@ public class DateSearchScreen extends JFrame {
 			}
 		});
 
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		editInvoiceButton.setBackground(new Color(59, 89, 182));
+		generateInvoiceButton.setBackground(new Color(59, 89, 182));
+
 		buttonsPanel.add(backToMainButton);
 		buttonsPanel.add(editInvoiceButton);
 		buttonsPanel.add(generateInvoiceButton);
 
 		// set up the title
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
+		titleLabel.setBackground(new Color(129, 159, 252));
 		titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
 
 		// container for title and buttons
 		JPanel titleAndButtonCont = new JPanel();
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
 		titleAndButtonCont.add(titleLabel);
 		titleAndButtonCont.add(buttonsPanel);
@@ -142,9 +153,11 @@ public class DateSearchScreen extends JFrame {
 		topContainer.add(new JLabel(" "), BorderLayout.PAGE_END);
 		// actual one
 		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
+		topContainer.setBackground(new Color(129, 159, 252));
 
 		// ScrollBar
 		JPanel jobContainer = new JPanel();
+		jobContainer.setBackground(new Color(129, 159, 252));
 		invoicesSP = getScrollPane();
 		invoicesSP.getViewport().setBackground(Color.WHITE);
 
@@ -167,9 +180,11 @@ public class DateSearchScreen extends JFrame {
 	private JScrollPane getScrollPane() throws SQLException {
 
 		String searchTerm = "%";
-		if (client != null) {
-			searchTerm = client.getClientId().toString();
+		if (searchT != null) {
+			searchTerm = searchT;
 		}
+
+		System.out.println("Search term is " + searchTerm);
 
 		invoices = dbc.getInvoicesByDate(searchTerm);
 
@@ -217,6 +232,10 @@ public class DateSearchScreen extends JFrame {
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
 
+		UIManager UI = new UIManager();
+		UI.put("OptionPane.background", new Color(129, 159, 252));
+		UI.put("Panel.background", new Color(129, 159, 252));
+		
 		JTextField searchField = new JTextField("");
 
 		int newCustomer = JOptionPane.showConfirmDialog(this,
@@ -238,10 +257,9 @@ public class DateSearchScreen extends JFrame {
 				setVisible(false);
 				dispose();
 			}
-		} else if (newCustomer == JOptionPane.CANCEL_OPTION){
-			//DO NOTHING;
-		}	else {
-		
+		} else if (newCustomer == JOptionPane.CANCEL_OPTION) {
+			// DO NOTHING;
+		} else {
 
 			NewCustomerScreen customerInfo = new NewCustomerScreen();
 

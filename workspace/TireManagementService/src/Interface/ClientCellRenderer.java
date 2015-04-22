@@ -20,7 +20,12 @@ public class ClientCellRenderer extends JLabel implements ListCellRenderer {
 	public Component getListCellRendererComponent(JList list, Object client,
 			int index, boolean isSelected, boolean hasFocus) {
 
-		setBackground(Color.WHITE);
+		if (index % 2 == 0) {
+			setBackground(Color.WHITE);
+		} else {
+			setBackground(new Color(238, 233, 233));
+		}
+
 		if (isSelected) {
 			setBackground(Color.YELLOW);
 		}

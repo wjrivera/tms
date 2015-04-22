@@ -37,7 +37,11 @@ public class InvoiceCellRenderer extends JPanel implements
 			JList<? extends Invoice> list, Invoice value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 
-		setBackground(Color.WHITE);
+		if (index % 2 == 0) {
+			setBackground(Color.WHITE);
+		} else {
+			setBackground(new Color(238, 233, 233));
+		}
 		if (isSelected) {
 			setBackground(Color.YELLOW);
 		}

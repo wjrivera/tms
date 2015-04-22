@@ -1,6 +1,7 @@
 package Interface;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -28,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
@@ -63,7 +65,7 @@ public class StartScreen extends JFrame {
 
 		if (fresh) {
 			try {
-				dbc.setInvoiceCount();
+				dbc.getLastState();
 				fresh = false;
 			} catch (IOException e2) {
 				// TODO Auto-generated catch block
@@ -79,11 +81,13 @@ public class StartScreen extends JFrame {
 
 		screenLayout = new JPanel();
 		screenLayout.setLayout(new BorderLayout());
+		screenLayout.setBackground(new Color(129, 159, 252));
 
 		// titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
 		// titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
 
 		titleLabel = new JLabel(logo, SwingConstants.CENTER);
+		titleLabel.setBackground(new Color(129, 159, 252));
 
 		JPanel searchFieldPanel = new JPanel();
 		searchFieldPanel.setLayout(new FlowLayout());
@@ -92,13 +96,17 @@ public class StartScreen extends JFrame {
 
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(2, 1));
+		centerPanel.setBackground(new Color(129, 159, 252));
 		buttonsLayout = new JPanel();
 		buttonsLayout.setLayout(new GridLayout(2, 2, 15, 15));
+		buttonsLayout.setBackground(new Color(129, 159, 252));
 
 		JPanel holder = new JPanel();
 		holder.setLayout(new BorderLayout());
+		holder.setBackground(new Color(129, 159, 252));
 
 		searchFieldPanel.add(searchField);
+		searchFieldPanel.setBackground(new Color(129, 159, 252));
 		holder.add(searchFieldPanel, BorderLayout.PAGE_END);
 		holder.add(titleLabel, BorderLayout.CENTER);
 
@@ -202,7 +210,7 @@ public class StartScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+						dbc.saveLastState(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -218,7 +226,8 @@ public class StartScreen extends JFrame {
 
 	public void searchByDate(Date d) throws ClassNotFoundException,
 			SQLException {
-		DateSearchScreen newInstance = new DateSearchScreen(null);
+		DateSearchScreen newInstance = new DateSearchScreen(
+				searchField.getText());
 		setVisible(false);
 		dispose();
 	}
@@ -243,32 +252,90 @@ public class StartScreen extends JFrame {
 
 	public void generateInvoice() throws SQLException, ClassNotFoundException {
 
-		NewCustomerScreen customerInfo = new NewCustomerScreen();
+		UIManager UI = new UIManager();
+		UI.put("OptionPane.background", new Color(129, 159, 252));
+		UI.put("Panel.background", new Color(129, 159, 252));
 
-		Client temp = new Client();
+		/*
+		 * NewCustomerScreen customerInfo = new NewCustomerScreen();
+		 * customerInfo.setBackground(new Color(59, 89, 182));
+		 * 
+		 * Client temp = new Client();
+		 * 
+		 * int result = JOptionPane.showConfirmDialog(null, customerInfo,
+		 * NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+		 * JOptionPane.PLAIN_MESSAGE);
+		 * 
+		 * if (result == JOptionPane.OK_OPTION) {
+		 * 
+		 * temp.setFirstName(customerInfo.firstName.getText());
+		 * temp.setLastName(customerInfo.lastName.getText());
+		 * temp.setEmail(customerInfo.email.getText());
+		 * temp.setPhoneNumber(customerInfo.phoneNumber.getText());
+		 * temp.setAddress(customerInfo.address.getText());
+		 * temp.setCity(customerInfo.city.getText());
+		 * temp.setState(customerInfo.state.getText());
+		 * temp.setZip(customerInfo.zip.getText());
+		 * temp.setVehicle(customerInfo.vehicles);
+		 * 
+		 * dbc.addClient(temp);
+		 * 
+		 * GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
+		 * null); setVisible(false); dispose(); }
+		 */
 
-		int result = JOptionPane.showConfirmDialog(null, customerInfo,
-				NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
-				JOptionPane.PLAIN_MESSAGE);
+		JTextField searchField = new JTextField("");
 
-		if (result == JOptionPane.OK_OPTION) {
+		int newCustomer = JOptionPane.showConfirmDialog(this,
+				"Is this an existing client?");
 
-			temp.setFirstName(customerInfo.firstName.getText());
-			temp.setLastName(customerInfo.lastName.getText());
-			temp.setEmail(customerInfo.email.getText());
-			temp.setPhoneNumber(customerInfo.phoneNumber.getText());
-			temp.setAddress(customerInfo.address.getText());
-			temp.setCity(customerInfo.city.getText());
-			temp.setState(customerInfo.state.getText());
-			temp.setZip(customerInfo.zip.getText());
-			temp.setVehicle(customerInfo.vehicles);
+		if (newCustomer == JOptionPane.YES_OPTION) {
+			int searchTerm = JOptionPane.showConfirmDialog(null, searchField,
+					"Enter Search Term", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
 
-			dbc.addClient(temp);
+			if (searchTerm == JOptionPane.OK_OPTION) {
+				try {
+					// TODO the following line should be changed later
+					CustomerSearchScreen.setSearchTerm(searchField.getText());
+					CustomerSearchScreen newInstance = new CustomerSearchScreen();
+				} catch (ClassNotFoundException | SQLException e) {
+					e.printStackTrace();
+				}
+				setVisible(false);
+				dispose();
+			}
+		} else if (newCustomer == JOptionPane.CANCEL_OPTION) {
+			// DO NOTHING;
+		} else {
 
-			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
-					null);
-			setVisible(false);
-			dispose();
+			NewCustomerScreen customerInfo = new NewCustomerScreen();
+
+			Client temp = new Client();
+
+			int result = JOptionPane.showConfirmDialog(null, customerInfo,
+					NewCustomerScreen.TITLE, JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+
+			if (result == JOptionPane.OK_OPTION) {
+
+				temp.setFirstName(customerInfo.firstName.getText());
+				temp.setLastName(customerInfo.lastName.getText());
+				temp.setEmail(customerInfo.email.getText());
+				temp.setPhoneNumber(customerInfo.phoneNumber.getText());
+				temp.setAddress(customerInfo.address.getText());
+				temp.setCity(customerInfo.city.getText());
+				temp.setState(customerInfo.state.getText());
+				temp.setZip(customerInfo.zip.getText());
+				temp.setVehicle(customerInfo.vehicles);
+
+				dbc.addClient(temp);
+
+				GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(
+						temp, null);
+				setVisible(false);
+				dispose();
+			}
 		}
 	}
 

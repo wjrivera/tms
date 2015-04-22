@@ -1,5 +1,6 @@
 package Interface;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -32,12 +33,15 @@ public class NewCustomerScreen extends JPanel {
 	private JButton addVehicle, removeVehicle;
 
 	public NewCustomerScreen() {
-
+	
+		setBackground(new Color(129, 159, 252));
+		
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		vehicles = new ArrayList<Vehicle>();
 
 		JPanel vehiclesPane = new JPanel();
+		vehiclesPane.setBackground(new Color(129, 159, 252));
 		vehiclesPane.setLayout(new GridLayout(1, 2, 15, 15));
 
 		f = new JLabel("First Name");
@@ -78,6 +82,7 @@ public class NewCustomerScreen extends JPanel {
 		});
 
 		JPanel infoPanel = new JPanel();
+		infoPanel.setBackground(new Color(129, 159, 252));
 		infoPanel.setLayout(new GridLayout(9, 2, 15, 15));
 
 		// Adding the Fields
@@ -154,6 +159,8 @@ public class NewCustomerScreen extends JPanel {
 
 		public NewVehicleScreen() {
 
+			setBackground(new Color(129, 159, 252));
+			
 			setLayout(new GridLayout(3, 2, 15, 15));
 
 			year = new JTextField();

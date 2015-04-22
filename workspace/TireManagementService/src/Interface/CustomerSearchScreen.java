@@ -43,6 +43,8 @@ public class CustomerSearchScreen extends JFrame {
 
 	public CustomerSearchScreen() throws ClassNotFoundException, SQLException {
 
+		setBackground(new Color(129, 159, 252));
+
 		dbc = DatabaseConnectivity.getInstance();
 
 		clients = new ArrayList<Client>();
@@ -57,7 +59,7 @@ public class CustomerSearchScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveInvoiceCount(Invoice.NextInvoiceNumber);
+						dbc.saveLastState(Invoice.NextInvoiceNumber);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -71,11 +73,15 @@ public class CustomerSearchScreen extends JFrame {
 
 		// set up the buttons
 		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setBackground(new Color(129, 159, 252));
 		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
 
 		backToMainButton = new JButton("Back To Main Screen");
 		addCustomerButton = new JButton("Add Customer");
 		generateInvoiceButton = new JButton("Generate Invoice");
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		addCustomerButton.setBackground(new Color(59, 89, 182));
+		generateInvoiceButton.setBackground(new Color(59, 89, 182));
 
 		backToMainButton.addActionListener(new ActionListener() {
 			@Override
@@ -117,16 +123,19 @@ public class CustomerSearchScreen extends JFrame {
 
 		// set up the title
 		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
+		titleLabel.setBackground(new Color(129, 159, 252));
 		titleLabel.setFont(new Font("Serif", Font.BOLD, 45));
 
 		// container for title and buttons
 		JPanel titleAndButtonCont = new JPanel();
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
 		titleAndButtonCont.add(titleLabel);
 		titleAndButtonCont.add(buttonsPanel);
 
 		// borderlayout to organize top half
 		JPanel topContainer = new JPanel();
+		topContainer.setBackground(new Color(129, 159, 252));
 		topContainer.setLayout(new BorderLayout());
 
 		// fillers
@@ -143,6 +152,7 @@ public class CustomerSearchScreen extends JFrame {
 
 		// gridLayout for screen
 		JPanel topLevelCont = new JPanel();
+		topLevelCont.setBackground(new Color(129, 159, 252));
 		topLevelCont.setLayout(new GridLayout(2, 1));
 
 		topLevelCont.add(topContainer);
@@ -217,12 +227,16 @@ public class CustomerSearchScreen extends JFrame {
 
 	public void generateInvoice() throws ClassNotFoundException, SQLException {
 
-		Client temp = clients.get(clientsList.getSelectedIndex());
+		if (clientsList.getSelectedIndex() >= 0) {
+			Client temp = clients.get(clientsList.getSelectedIndex());
 
-		GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
-				null);
-		setVisible(false);
-		dispose();
+			GenerateInvoiceScreen newInstance = new GenerateInvoiceScreen(temp,
+					null);
+			setVisible(false);
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(this, "Please select a Client!");
+		}
 	}
 
 	public class ClientListModel extends AbstractListModel<Client> {
