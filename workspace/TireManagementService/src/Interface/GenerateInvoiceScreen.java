@@ -190,7 +190,13 @@ public class GenerateInvoiceScreen extends JFrame {
 		if (screen.currentVehicle == null) {
 			JOptionPane.showMessageDialog(null, "Please Select a Vehicle!");
 		} else {
+
+			client = screen.client;
+
 			i = screen.getInvoice();
+			i.setClient(client);
+			i.setClientId(client.getClientId());
+
 			dbc.addInvoice(i);
 			dbc.addClient(i.getClient());
 			try {

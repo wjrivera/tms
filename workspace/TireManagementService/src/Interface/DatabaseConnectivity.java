@@ -20,12 +20,13 @@ import utilities.Invoice;
 import utilities.Job;
 import utilities.StoreInfo;
 import utilities.Vehicle;
+
 /**
  * Singleton class, mostly because we only need one instance of it at all times
  * Used to handle all the connections between database
  * 
  * @author Andres
- *
+ * 
  */
 public class DatabaseConnectivity implements Serializable {
 
@@ -34,7 +35,6 @@ public class DatabaseConnectivity implements Serializable {
 			directory = "\\TMS\\Data\\";
 	Connection conn;
 
-	
 	/**
 	 * private constructor to get only one instance
 	 * 
@@ -343,6 +343,8 @@ public class DatabaseConnectivity implements Serializable {
 			temp.setBillTo(rs.getString("bill_to"));
 			temp.setVehicle(getVehicleFromId(rs.getString("vehicle_id")));
 			temp.setClient(c);
+
+			System.out.println("Client is " + c.toString());
 			temp.setDate(rs.getDate("date"));
 
 			temp.setJobs(getJobsFromInvNum(temp.getInvoiceNumber()));

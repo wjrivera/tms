@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +66,7 @@ public class NewInvoiceScreen extends JPanel {
 		if (in != null) {
 			System.out.println("in is not null");
 			i = in;
+			client = i.getClient();
 			jobs = in.getJobs();
 		} else {
 			System.out.println("in is null");
@@ -114,7 +116,7 @@ public class NewInvoiceScreen extends JPanel {
 
 			cal.setTime(i.getDate());
 			name.setText(i.getBillTo());
-			month.setText("" + cal.get(Calendar.MONTH));
+			month.setText("" + (cal.get(Calendar.MONTH) + 1));
 			day.setText("" + cal.get(Calendar.DAY_OF_MONTH));
 			year.setText("" + cal.get(Calendar.YEAR));
 		}
@@ -467,13 +469,23 @@ public class NewInvoiceScreen extends JPanel {
 
 			System.out.println("i is not null");
 
-			String invoiceDate = month.getText() + "/" + day.getText() + "/"
+			String invoiceDate = day.getText() + "/" + month.getText() + "/"
 					+ year.getText();
+
+			Date dd = null;
+			try {
+				dd = sdf.parse(invoiceDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			i.setBillTo(name.getText());
 			i.setJobs(jobs);
 			i.setClient(client);
 			i.setVehicle(currentVehicle);
+			if (dd != null)
+				i.setDate(dd);
 
 			return i;
 		} else {
