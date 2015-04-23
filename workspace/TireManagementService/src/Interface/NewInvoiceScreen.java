@@ -5,7 +5,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -26,13 +29,20 @@ import utilities.Job;
 import utilities.Tire;
 import utilities.Vehicle;
 
+/**
+ * Class used to display JPanel information correctly
+ * 
+ * 
+ */
 public class NewInvoiceScreen extends JPanel {
 
 	public static final String TITLE = "Add Invoice";
+	public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/M/yyyy");
 
 	public JButton addVehicle, removeVehicle, addNewClient, addJob, removeJob;
-	public JTextField name, email, phoneNumber, address, city, state, zip;
-	private JLabel n, e, p, a, c, s, z, selectedVehicle, jobsTotal;
+	public JTextField name, email, phoneNumber, address, city, state, zip,
+			month, day, year;
+	private JLabel n, e, p, a, c, s, z, selectedVehicle, jobsTotal, date;
 	private JScrollPane vehiclesScroll, jobsScroll;
 	private VehicleListModel vLM;
 	public Vehicle currentVehicle;
@@ -68,7 +78,8 @@ public class NewInvoiceScreen extends JPanel {
 		a = new JLabel("Address");
 		c = new JLabel("City");
 		s = new JLabel("State");
-		z = new JLabel("zip");
+		z = new JLabel("Zip");
+		date = new JLabel("Date (MM DD YY):");
 
 		selectedVehicle = new JLabel("Selected Vehicle: ");
 
@@ -92,6 +103,20 @@ public class NewInvoiceScreen extends JPanel {
 			city = new JTextField();
 			state = new JTextField();
 			zip = new JTextField();
+		}
+
+		Calendar cal = Calendar.getInstance();
+		month = new JTextField("" + (cal.get(Calendar.MONTH) + 1));
+		day = new JTextField("" + cal.get(Calendar.DAY_OF_MONTH));
+		year = new JTextField("" + cal.get(Calendar.YEAR));
+
+		if (i != null) {
+
+			cal.setTime(i.getDate());
+			name.setText(i.getBillTo());
+			month.setText("" + cal.get(Calendar.MONTH));
+			day.setText("" + cal.get(Calendar.DAY_OF_MONTH));
+			year.setText("" + cal.get(Calendar.YEAR));
 		}
 
 		addVehicle = new JButton("Add New Vehicle");
@@ -146,9 +171,14 @@ public class NewInvoiceScreen extends JPanel {
 		add(billingInfo);
 		add(new JLabel(" "));
 
+		JPanel datePanel = new JPanel(new GridLayout(1, 3, 15, 15));
+		datePanel.add(month);
+		datePanel.add(day);
+		datePanel.add(year);
+
 		JPanel infoPanel = new JPanel();
 		infoPanel.setBackground(Color.WHITE);
-		infoPanel.setLayout(new GridLayout(8, 2, 15, 15));
+		infoPanel.setLayout(new GridLayout(9, 2, 15, 15));
 
 		infoPanel.add(n);
 		infoPanel.add(name);
@@ -164,6 +194,8 @@ public class NewInvoiceScreen extends JPanel {
 		infoPanel.add(state);
 		infoPanel.add(z);
 		infoPanel.add(zip);
+		infoPanel.add(date);
+		infoPanel.add(datePanel);
 
 		JLabel vehicleLabel = new JLabel("Vehicle");
 		vehicleLabel.setFont(new Font("Serif", Font.BOLD, 17));
@@ -293,6 +325,9 @@ public class NewInvoiceScreen extends JPanel {
 					.getText()), vehicleInfo.make.getText(),
 					vehicleInfo.model.getText());
 			vLM.add(temp);
+			List<Vehicle> tV = client.getVehicle();
+			tV.add(temp);
+			client.setVehicle(tV);
 		}
 
 		// TODO Add vehicles to client
@@ -301,7 +336,10 @@ public class NewInvoiceScreen extends JPanel {
 	private void removeVehicle() {
 
 		// TODO Remove vehicles from client
+		currentVehicle = null;
 		vLM.remove(vehiclesList.getSelectedIndex());
+		selectedVehicle.setText("Select a Vehicle");
+
 	}
 
 	private void addJob() {
@@ -327,6 +365,12 @@ public class NewInvoiceScreen extends JPanel {
 		updateTotals();
 	}
 
+	/**
+	 * Class used to display the vehicle in a joption pane and show it correctly
+	 * 
+	 * @author Andres
+	 * 
+	 */
 	class NewVehicleScreen extends JPanel {
 
 		public static final String TITLE = "Add New Vehicle";
@@ -357,6 +401,12 @@ public class NewInvoiceScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Used to prompt for the job information
+	 * 
+	 * @author Andres
+	 * 
+	 */
 	class NewJobScreen extends JPanel {
 
 		public static final String TITLE = "Add New Job";
@@ -404,6 +454,34 @@ public class NewInvoiceScreen extends JPanel {
 			add(price);
 
 			setVisible(true);
+		}
+	}
+
+	/**
+	 * Used to get the instance of the invoice in this screen
+	 * 
+	 * @return the data in an invoice item
+	 */
+	public Invoice getInvoice() {
+		if (i != null) {
+
+			System.out.println("i is not null");
+
+			String invoiceDate = month.getText() + "/" + day.getText() + "/"
+					+ year.getText();
+
+			i.setBillTo(name.getText());
+			i.setJobs(jobs);
+			i.setClient(client);
+			i.setVehicle(currentVehicle);
+
+			return i;
+		} else {
+
+			System.out.println("i is null");
+
+			return new Invoice(client, client.getClientId(), new Date(),
+					currentVehicle, jobs, name.getText());
 		}
 	}
 }

@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,8 +25,15 @@ import javax.swing.WindowConstants;
 import utilities.Client;
 import utilities.Invoice;
 
+/**
+ * Used to create an invoice and save it's information in the database;
+ * 
+ * @author Andres
+ * 
+ */
 public class GenerateInvoiceScreen extends JFrame {
 
+	// title
 	private static final String TITLE = "Generate Invoice";
 
 	JButton backToMainButton, addInvoice;
@@ -37,6 +43,14 @@ public class GenerateInvoiceScreen extends JFrame {
 	Client client;
 	DatabaseConnectivity dbc;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param c
+	 * @param in
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public GenerateInvoiceScreen(Client c, Invoice in)
 			throws ClassNotFoundException, SQLException {
 
@@ -59,7 +73,7 @@ public class GenerateInvoiceScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveLastState(Invoice.NextInvoiceNumber);
+						dbc.saveLastState();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -165,18 +179,35 @@ public class GenerateInvoiceScreen extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * adds the invoice to the database and goes to date by search screen with
+	 * clients name
+	 * 
+	 * @throws SQLException
+	 */
 	public void addInvoice() throws SQLException {
 
 		if (screen.currentVehicle == null) {
 			JOptionPane.showMessageDialog(null, "Please Select a Vehicle!");
 		} else {
-			i = new Invoice(screen.i.getInvoiceNumber(), client,
-					client.getClientId(), new Date(), screen.currentVehicle,
-					screen.jobs, screen.name.getText());
+			i = screen.getInvoice();
 			dbc.addInvoice(i);
+			dbc.addClient(i.getClient());
+			try {
+				DateSearchScreen newInstance = new DateSearchScreen(
+						client.getLastName());
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			setVisible(false);
+			dispose();
 		}
 	}
 
+	/**
+	 * returns to main screen
+	 */
 	public void backToMain() {
 		// close the current window()
 		try {

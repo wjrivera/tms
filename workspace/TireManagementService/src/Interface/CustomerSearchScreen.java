@@ -19,32 +19,56 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
-import utilities.Invoice;
 
+/**
+ * 
+ * The customer search screen, searches by search term alaphabetically
+ * 
+ * @author Andres
+ *
+ */
 public class CustomerSearchScreen extends JFrame {
 
+	// title
 	private static final String TITLE = "Search By Customer";
 	DatabaseConnectivity dbc = null;
 
 	List<Client> clients;
 
+	private JPopupMenu rightClickMenu;
+	private JMenuItem deleteClientItem;
 	private static String searchTerm;
 	private ClientListModel cLM;
 	JButton backToMainButton, addCustomerButton, generateInvoiceButton;
 	JList clientsList;
 	JScrollPane jobs;
 
+	/**
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	public CustomerSearchScreen() throws ClassNotFoundException, SQLException {
+
+		rightClickMenu = new JPopupMenu();
+		deleteClientItem = new JMenu("Delete Client");
+
+		rightClickMenu.add(deleteClientItem);
 
 		setBackground(new Color(129, 159, 252));
 
+		
+		// database connectivity singleton
 		dbc = DatabaseConnectivity.getInstance();
 
 		clients = new ArrayList<Client>();
@@ -59,7 +83,7 @@ public class CustomerSearchScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveLastState(Invoice.NextInvoiceNumber);
+						dbc.saveLastState();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -177,16 +201,39 @@ public class CustomerSearchScreen extends JFrame {
 
 		clients = dbc.getClientsByName(searchTerm);
 
-		cLM = new ClientListModel(clients);
+		if (clients.size() > 0) {
+			cLM = new ClientListModel(clients);
 
-		clientsList = new JList(cLM);
-		clientsList.setFont(new Font("Serif", Font.BOLD, 20));
-		clientsList.setCellRenderer(new ClientCellRenderer());
-		clientsList.setVisibleRowCount(8);
+			clientsList = new JList(cLM);
+			clientsList.setFont(new Font("Serif", Font.BOLD, 20));
+			clientsList.setCellRenderer(new ClientCellRenderer());
+			clientsList.setVisibleRowCount(8);
 
-		return new JScrollPane(clientsList,
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			
+			//Feautre not fully implemented
+			/*
+			clientsList.addMouseListener(new MouseAdapter() {
+				public void MousePressed(MouseEvent e) {
+					if (e.isPopupTrigger()) {
+						deleteClient(((Client) clientsList.getSelectedValue())
+								.getClientId().toString(),
+								((Client) clientsList.getSelectedValue())
+										.toString());
+					}
+				}
+
+
+			});
+			*/
+
+			return new JScrollPane(clientsList,
+					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		} else {
+			return new JScrollPane(new JLabel("NO RECORDS FOUND"),
+					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		}
 
 	}
 
@@ -265,4 +312,19 @@ public class CustomerSearchScreen extends JFrame {
 
 	}
 
+	public void deleteClient(String client_id, String name) {
+
+		int result = JOptionPane.showConfirmDialog(null,
+				"Are you sure you want to delete " + name
+						+ "\n THIS ACTION CANNOT BE UNDONE", "DELETE CLIENT",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+
+		if (result == JOptionPane.YES_OPTION) {
+			// client should be deleted but not yet because it might lose
+			// previous invoices, we need to get in touch with the client to
+			// change this
+			// The fucnion Exists in DatabaseConnectivity
+		}
+
+	}
 }

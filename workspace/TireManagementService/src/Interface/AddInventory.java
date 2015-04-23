@@ -22,6 +22,7 @@ import javax.swing.WindowConstants;
 
 public class AddInventory extends JFrame {
 
+	// Title of the screen
 	private static final String TITLE = "Add Inventory";
 
 	JButton backToMainButton, applyButton;
@@ -39,6 +40,7 @@ public class AddInventory extends JFrame {
 		JPanel topLevelCont = new JPanel();
 		JPanel panel = new JPanel(gridLayout);
 
+		//set the background color
 		buttonsPanel.setBackground(new Color(129, 159, 252));
 		titleAndButtonCont.setBackground(new Color(129, 159, 252));
 		topContainer.setBackground(new Color(129, 159, 252));

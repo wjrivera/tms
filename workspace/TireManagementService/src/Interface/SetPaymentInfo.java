@@ -20,11 +20,18 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import utilities.StoreInfo;
+
 public class SetPaymentInfo extends JFrame {
 
 	private static final String TITLE = "Set Payment Information";
 
 	JButton backToMainButton, applyButton;
+
+	JTextField bankNameTextField, addressTextField, cityTextField,
+			stateTextField, zipTextField, phoneTextField, faxTextField,
+			emailTextField, accountNumberTextField, routingTextField,
+			payPalTextField, payPalPasswordTextField;
 
 	public SetPaymentInfo() {
 
@@ -57,8 +64,7 @@ public class SetPaymentInfo extends JFrame {
 		backToMainButton = new JButton("Back To Main Screen");
 		backToMainButton.setBackground(new Color(59, 89, 182));
 		backToMainButton.setForeground(Color.WHITE);
-		backToMainButton
-				.setFont(new Font("Serif", Font.PLAIN, 14));
+		backToMainButton.setFont(new Font("Serif", Font.PLAIN, 14));
 
 		applyButton = new JButton("Apply Information");
 		applyButton.setBackground(new Color(59, 89, 182));
@@ -72,75 +78,75 @@ public class SetPaymentInfo extends JFrame {
 		bankNameLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		bankNameLabel.setBackground(new Color(59, 89, 182));
 		bankNameLabel.setForeground(Color.BLACK);
-		JTextField bankNameTextField = new JTextField();
+		bankNameTextField = new JTextField();
 
 		JLabel addressLabel = new JLabel("     Bank Address: ");
 		addressLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		addressLabel.setBackground(new Color(59, 89, 182));
 		addressLabel.setForeground(Color.BLACK);
-		JTextField addressTextField = new JTextField();
+		addressTextField = new JTextField();
 
 		JLabel cityLabel = new JLabel("     City: ");
 		cityLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		cityLabel.setBackground(new Color(59, 89, 182));
 		cityLabel.setForeground(Color.BLACK);
-		JTextField cityTextField = new JTextField();
+		cityTextField = new JTextField();
 
 		JLabel stateLabel = new JLabel("     State: ");
 		stateLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		stateLabel.setBackground(new Color(59, 89, 182));
 		stateLabel.setForeground(Color.BLACK);
-		JTextField stateTextField = new JTextField();
+		stateTextField = new JTextField();
 
 		JLabel zipLabel = new JLabel("     Zip Code: ");
 		zipLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		zipLabel.setBackground(new Color(59, 89, 182));
 		zipLabel.setForeground(Color.BLACK);
-		JTextField zipTextField = new JTextField();
+		zipTextField = new JTextField();
 
 		JLabel phoneLabel = new JLabel("     Bank Phone Number: ");
 		phoneLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		phoneLabel.setBackground(new Color(59, 89, 182));
 		phoneLabel.setForeground(Color.BLACK);
-		JTextField phoneTextField = new JTextField();
+		phoneTextField = new JTextField();
 
 		JLabel faxLabel = new JLabel("     Bank Fax Number: ");
 		faxLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		faxLabel.setBackground(new Color(59, 89, 182));
 		faxLabel.setForeground(Color.BLACK);
-		JTextField faxTextField = new JTextField();
+		faxTextField = new JTextField();
 
 		JLabel emailLabel = new JLabel("     Bank Email Address: ");
 		emailLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		emailLabel.setBackground(new Color(59, 89, 182));
 		emailLabel.setForeground(Color.BLACK);
-		JTextField emailTextField = new JTextField();
+		emailTextField = new JTextField();
 
 		JLabel accountNumberLabel = new JLabel("     Account #: ");
 		accountNumberLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN,
 				14));
 		accountNumberLabel.setBackground(new Color(59, 89, 182));
 		accountNumberLabel.setForeground(Color.BLACK);
-		JTextField accountNumberTextField = new JTextField();
+		accountNumberTextField = new JTextField();
 
 		JLabel routingLabel = new JLabel("     Routing #: ");
 		routingLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		routingLabel.setBackground(new Color(59, 89, 182));
 		routingLabel.setForeground(Color.BLACK);
-		JTextField routingTextField = new JTextField();
+		routingTextField = new JTextField();
 
 		JLabel payPalLabel = new JLabel("     PayPal Account #: ");
 		payPalLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
-		//payPalLabel.setBackground(new Color(59, 89, 182));
-		//payPalLabel.setForeground(Color.BLACK);
-		JTextField payPalTextField = new JTextField();
+		// payPalLabel.setBackground(new Color(59, 89, 182));
+		// payPalLabel.setForeground(Color.BLACK);
+		payPalTextField = new JTextField();
 
 		JLabel payPalPasswordLabel = new JLabel("     PayPal Password #: ");
 		payPalPasswordLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN,
 				14));
 		payPalPasswordLabel.setBackground(new Color(59, 89, 182));
 		payPalPasswordLabel.setForeground(Color.BLACK);
-		JTextField payPalPasswordTextField = new JTextField();
+		payPalPasswordTextField = new JTextField();
 
 		// adding the listeners
 		backToMainButton.addActionListener(new ActionListener() {

@@ -8,6 +8,12 @@ import javax.swing.JPanel;
 
 import utilities.Invoice;
 
+
+/**
+ * Deprecated, no longer being used, replaced by InvoiceCellRenderer;
+ * @author Andres
+ *
+ */
 public class InvoiceSummaryItem extends JPanel {
 
 	private JButton viewButton;

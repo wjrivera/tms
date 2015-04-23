@@ -7,6 +7,12 @@ import javax.swing.AbstractListModel;
 
 import utilities.Job;
 
+/**
+ * Helps display the Jobs Properly and update them in real time
+ * 
+ * @author Andres
+ * 
+ */
 public class JobsListModel extends AbstractListModel<Job> {
 
 	private List<Job> jobs;

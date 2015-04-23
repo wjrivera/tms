@@ -21,6 +21,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+
 public class EditCurrency extends JFrame {
 
 	private static final String TITLE = "Edit Currency";

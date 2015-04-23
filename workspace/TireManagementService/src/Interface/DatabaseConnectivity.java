@@ -1,9 +1,7 @@
 package Interface;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,19 +12,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 import utilities.Client;
 import utilities.Invoice;
 import utilities.Job;
+import utilities.StoreInfo;
 import utilities.Vehicle;
-
+/**
+ * Singleton class, mostly because we only need one instance of it at all times
+ * Used to handle all the connections between database
+ * 
+ * @author Andres
+ *
+ */
 public class DatabaseConnectivity implements Serializable {
 
 	private static DatabaseConnectivity instance;
-	public static final String INVOICECOUNT = "invoiceCount.tmscf";
+	public static final String SAVESTATE = "TireManagementSystem.tmscf",
+			directory = "\\TMS\\Data\\";
 	Connection conn;
 
+	
+	/**
+	 * private constructor to get only one instance
+	 * 
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 */
 	private DatabaseConnectivity() throws ClassNotFoundException, SQLException {
 		Class.forName("org.h2.Driver");
 		conn = DriverManager.getConnection(
@@ -195,6 +209,22 @@ public class DatabaseConnectivity implements Serializable {
 
 	}
 
+	public void deleteRecordsForClient(String clientId) throws SQLException {
+
+		List<Invoice> clinetInvoices = getInvoicesByDate(clientId);
+
+		final String deleteClient = "DELETE FROM client"
+				+ "WHERE clientId LIKE ? ;";
+
+		PreparedStatement addClientStatement = conn
+				.prepareStatement(deleteClient);
+
+		addClientStatement.setString(1, clientId);
+
+		addClientStatement.executeUpdate();
+
+	}
+
 	public void addInvoice(Invoice i) throws SQLException {
 		String addInvoice = "MERGE INTO invoice"
 				+ "(invoice_num, client_id, vehicle_id, bill_to, date)"
@@ -241,10 +271,10 @@ public class DatabaseConnectivity implements Serializable {
 		List<Client> returnList = new ArrayList<Client>();
 
 		String retrieveSQL = "SELECT * FROM client "
-				+ "WHERE CONCAT(firstName, ' ',lastName) LIKE ?";
+				+ "WHERE UPPER(CONCAT(firstName, ' ',lastName)) LIKE ? ORDER BY lastName";
 
 		PreparedStatement retrieveClient = conn.prepareStatement(retrieveSQL);
-		retrieveClient.setString(1, "%" + name + "%");
+		retrieveClient.setString(1, "%" + name.toUpperCase() + "%");
 
 		ResultSet rs = retrieveClient.executeQuery();
 
@@ -291,7 +321,8 @@ public class DatabaseConnectivity implements Serializable {
 		}
 
 		String retrieveSQL = "SELECT * FROM invoice "
-				+ "WHERE client_id LIKE ? " + "ORDER BY date DESC";
+				+ "WHERE client_id LIKE ? "
+				+ "ORDER BY date DESC, invoice_num DESC";
 
 		PreparedStatement retrieveInvoices = conn.prepareStatement(retrieveSQL);
 
@@ -383,12 +414,22 @@ public class DatabaseConnectivity implements Serializable {
 
 	}
 
-	public void saveLastState(int invNum) throws IOException {
+	public void saveLastState() throws IOException {
 
-		String content = "" + invNum;
+		String content = "" + Invoice.NextInvoiceNumber + "\n"
+				+ StoreInfo.getAddress() + "\n" + StoreInfo.getCity() + "\n"
+				+ StoreInfo.getState() + "\n" + StoreInfo.getZip() + "\n"
+				+ StoreInfo.getStoreName() + "\n" + StoreInfo.getPhoneNumber()
+				+ "\n" + StoreInfo.getFaxNumber() + "\n" + StoreInfo.getEmail()
+				+ "\n" + StoreInfo.getCounty() + "\n" + StoreInfo.getTaxId();
 
-		File file = new File(System.getProperty("user.home") + "\\"
-				+ INVOICECOUNT);
+		boolean dirCreation = new File(directory).mkdirs();
+
+		System.out.println("saving info");
+		StoreInfo.printInfo();
+
+		File file = new File(System.getProperty("user.home") + "\\" + directory
+				+ SAVESTATE);
 
 		if (!file.exists()) {
 			file.createNewFile();
@@ -397,28 +438,38 @@ public class DatabaseConnectivity implements Serializable {
 		FileWriter fw = new FileWriter(file.getAbsoluteFile());
 		BufferedWriter bw = new BufferedWriter(fw);
 		bw.write(content);
+
+		System.out.println("Info saved\n");
+
 		bw.close();
 	}
 
 	public void getLastState() throws IOException {
 
-		int count = 0;
+		System.out.println("Extracting info");
 
-		BufferedReader br = null;
+		Scanner scanner = new Scanner(new File(System.getProperty("user.home")
+				+ "\\" + directory + SAVESTATE));
 
-		String line;
+		Invoice.NextInvoiceNumber = Integer.parseInt(scanner.nextLine());
+		StoreInfo.setAddress(scanner.nextLine());
+		StoreInfo.setCity(scanner.nextLine());
+		StoreInfo.setState(scanner.nextLine());
+		StoreInfo.setZip(scanner.nextLine());
+		StoreInfo.setStoreName(scanner.nextLine());
+		StoreInfo.setPhoneNumber(scanner.nextLine());
+		StoreInfo.setFaxNumber(scanner.nextLine());
+		StoreInfo.setEmail(scanner.nextLine());
+		StoreInfo.setCounty(scanner.nextLine());
+		StoreInfo.setTaxId(scanner.nextLine());
 
-		br = new BufferedReader(new FileReader(System.getProperty("user.home")
-				+ "\\" + INVOICECOUNT));
-
-		while ((line = br.readLine()) != null) {
-			count = Integer.parseInt(line);
-		}
+		System.out.println("Last state retrieved");
+		StoreInfo.printInfo();
 
 		// TODO get the stored store information and place it on the StoreInfo
 		// class;
 
-		Invoice.NextInvoiceNumber = count;
+		scanner.close();
 
 	}
 }

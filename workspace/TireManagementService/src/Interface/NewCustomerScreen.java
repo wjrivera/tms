@@ -20,6 +20,12 @@ import javax.swing.JTextField;
 
 import utilities.Vehicle;
 
+/**
+ * JPanel to be shown in a Dialog for getting customer info
+ * 
+ * @author Andres
+ * 
+ */
 public class NewCustomerScreen extends JPanel {
 
 	public static final String TITLE = "Add New Customer";
@@ -33,9 +39,9 @@ public class NewCustomerScreen extends JPanel {
 	private JButton addVehicle, removeVehicle;
 
 	public NewCustomerScreen() {
-	
+
 		setBackground(new Color(129, 159, 252));
-		
+
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 		vehicles = new ArrayList<Vehicle>();
@@ -111,6 +117,11 @@ public class NewCustomerScreen extends JPanel {
 		setVisible(true);
 	}
 
+	/**
+	 * returns the scroll pane, sepearate function for efficiency
+	 * 
+	 * @return
+	 */
 	private JScrollPane getScrollPane() {
 
 		vLM = new VehicleListModel(vehicles);
@@ -126,6 +137,9 @@ public class NewCustomerScreen extends JPanel {
 
 	}
 
+	/**
+	 * Adds the vehicle to the database
+	 */
 	private void addVehicle() {
 
 		NewVehicleScreen vehicleInfo = new NewVehicleScreen();
@@ -160,7 +174,7 @@ public class NewCustomerScreen extends JPanel {
 		public NewVehicleScreen() {
 
 			setBackground(new Color(129, 159, 252));
-			
+
 			setLayout(new GridLayout(3, 2, 15, 15));
 
 			year = new JTextField();

@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -20,13 +21,32 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import utilities.StoreInfo;
+
+/**
+ * Class used to edit the store info, all the data is stored locally
+ * 
+ * @author Andres
+ * 
+ */
 public class EditStoreInfo extends JFrame {
 
 	private static final String TITLE = "Edit Store Information";
 
+	DatabaseConnectivity dbc;
 	JButton backToMainButton, applyButton;
+	JTextField companyTextField, addressTextField, cityTextField,
+			stateTextField, zipTextField, phoneTextField, faxTextField,
+			emailTextField, countyTextField, taxTextField;
 
 	public EditStoreInfo() {
+
+		try {
+			dbc = DatabaseConnectivity.getInstance();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		GridLayout gridLayout = new GridLayout(0, 4);
@@ -78,61 +98,61 @@ public class EditStoreInfo extends JFrame {
 		companyLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		companyLabel.setBackground(new Color(59, 89, 182));
 		companyLabel.setForeground(Color.BLACK);
-		JTextField companyTextField = new JTextField();
+		companyTextField = new JTextField(StoreInfo.getStoreName());
 
 		JLabel addressLabel = new JLabel("     Address: ");
 		addressLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		addressLabel.setBackground(new Color(59, 89, 182));
 		addressLabel.setForeground(Color.BLACK);
-		JTextField addressTextField = new JTextField();
+		addressTextField = new JTextField(StoreInfo.getAddress());
 
 		JLabel cityLabel = new JLabel("     City: ");
 		cityLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		cityLabel.setBackground(new Color(59, 89, 182));
 		cityLabel.setForeground(Color.BLACK);
-		JTextField cityTextField = new JTextField();
+		cityTextField = new JTextField(StoreInfo.getCity());
 
 		JLabel stateLabel = new JLabel("     State: ");
 		stateLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		stateLabel.setBackground(new Color(59, 89, 182));
 		stateLabel.setForeground(Color.BLACK);
-		JTextField stateTextField = new JTextField();
+		stateTextField = new JTextField(StoreInfo.getState());
 
 		JLabel zipLabel = new JLabel("     Zip Code: ");
 		zipLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		zipLabel.setBackground(new Color(59, 89, 182));
 		zipLabel.setForeground(Color.BLACK);
-		JTextField zipTextField = new JTextField();
+		zipTextField = new JTextField(StoreInfo.getZip());
 
 		JLabel phoneLabel = new JLabel("     Phone Number: ");
 		phoneLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		phoneLabel.setBackground(new Color(59, 89, 182));
 		phoneLabel.setForeground(Color.BLACK);
-		JTextField phoneTextField = new JTextField();
+		phoneTextField = new JTextField(StoreInfo.getPhoneNumber());
 
 		JLabel faxLabel = new JLabel("     Fax Number: ");
 		faxLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		faxLabel.setBackground(new Color(59, 89, 182));
 		faxLabel.setForeground(Color.BLACK);
-		JTextField faxTextField = new JTextField();
+		faxTextField = new JTextField(StoreInfo.getFaxNumber());
 
 		JLabel emailLabel = new JLabel("     Email Address: ");
 		emailLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		emailLabel.setBackground(new Color(59, 89, 182));
 		emailLabel.setForeground(Color.BLACK);
-		JTextField emailTextField = new JTextField();
+		emailTextField = new JTextField(StoreInfo.getEmail());
 
 		JLabel countyLabel = new JLabel("     County: ");
 		countyLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		countyLabel.setBackground(new Color(59, 89, 182));
 		countyLabel.setForeground(Color.BLACK);
-		JTextField countyTextField = new JTextField();
+		countyTextField = new JTextField(StoreInfo.getCounty());
 
 		JLabel taxLabel = new JLabel("     Tax ID#: ");
 		taxLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
 		taxLabel.setBackground(new Color(59, 89, 182));
 		taxLabel.setForeground(Color.BLACK);
-		JTextField taxTextField = new JTextField();
+		taxTextField = new JTextField(StoreInfo.getTaxId());
 
 		// adding the listeners
 		backToMainButton.addActionListener(new ActionListener() {
@@ -224,6 +244,26 @@ public class EditStoreInfo extends JFrame {
 	public void options() {
 		try {
 			OptionsScreen newInstance = new OptionsScreen();
+			StoreInfo.setStoreName(companyTextField.getText());
+			StoreInfo.setAddress(addressTextField.getText());
+			StoreInfo.setCity(cityTextField.getText());
+			StoreInfo.setState(stateTextField.getText());
+			StoreInfo.setZip(zipTextField.getText());
+			StoreInfo.setPhoneNumber(phoneTextField.getText());
+			StoreInfo.setFaxNumber(faxTextField.getText());
+			StoreInfo.setEmail(emailTextField.getText());
+			StoreInfo.setCounty(countyTextField.getText());
+			StoreInfo.setTaxId(taxTextField.getText());
+
+			StoreInfo.printInfo();
+
+			try {
+				dbc.saveLastState();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

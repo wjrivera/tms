@@ -7,6 +7,12 @@ import javax.swing.AbstractListModel;
 
 import utilities.Vehicle;
 
+/**
+ * Hel[ps display the vehicles properly and update them in real time
+ * 
+ * @author Andres
+ * 
+ */
 public class VehicleListModel extends AbstractListModel<Vehicle> {
 
 	private List<Vehicle> vehicles;

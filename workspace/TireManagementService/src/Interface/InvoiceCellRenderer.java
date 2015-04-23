@@ -21,6 +21,10 @@ public class InvoiceCellRenderer extends JPanel implements
 	JLabel invoiceNum = new JLabel(" ");
 	JLabel vehicle = new JLabel(" ");
 
+	
+	/**
+	 * Used to display a custom JList item
+	 */
 	public InvoiceCellRenderer() {
 
 		invoiceNum.setFont(new Font("Serif", Font.BOLD, 15));
@@ -49,7 +53,12 @@ public class InvoiceCellRenderer extends JPanel implements
 		name.setText(value.getClient().toString());
 		invoiceNum.setText(value.getInvoiceNumber().toString());
 		date.setText(value.getDate().toString());
+		
+		System.out.println("Invoice # is " + value.getInvoiceNumber().toString());
+		
 		vehicle.setText(value.getVehicle().toString());
+		
+		System.out.println("Vehicle for this invoice is " + value.getVehicle().toString());
 
 		return this;
 	}

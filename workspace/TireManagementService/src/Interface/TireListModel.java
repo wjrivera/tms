@@ -7,6 +7,11 @@ import javax.swing.AbstractListModel;
 
 import utilities.Tire;
 
+/**
+ * Unused, but working...due to clients request
+ * @author Andres
+ *
+ */
 public class TireListModel extends AbstractListModel<Tire> {
 
 	private List<Tire> tires;

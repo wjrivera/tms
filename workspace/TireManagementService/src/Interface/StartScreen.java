@@ -33,8 +33,14 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import utilities.Client;
-import utilities.Invoice;
 
+/**
+ * Main screen of the program, starts up the program and displays the initial
+ * layout
+ * 
+ * @author Andres
+ * 
+ */
 public class StartScreen extends JFrame {
 
 	public static final String TITLE = "Tire Management System";
@@ -59,6 +65,7 @@ public class StartScreen extends JFrame {
 	JButton searchByDateButton, searchByCustomerButton, optionsButton,
 			generateInvoiceButton;
 
+	//gets the singleton instance of DatabaseConnectivty
 	DatabaseConnectivity dbc = DatabaseConnectivity.getInstance();
 
 	public StartScreen() throws ClassNotFoundException, SQLException {
@@ -210,7 +217,7 @@ public class StartScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveLastState(Invoice.NextInvoiceNumber);
+						dbc.saveLastState();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

@@ -10,6 +10,12 @@ import javax.swing.ListCellRenderer;
 
 import utilities.Client;
 
+/**
+ * Used to display a custom JList item correctly
+ * 
+ * @author Andres
+ *
+ */
 public class ClientCellRenderer extends JLabel implements ListCellRenderer {
 
 	public ClientCellRenderer() {
@@ -20,6 +26,7 @@ public class ClientCellRenderer extends JLabel implements ListCellRenderer {
 	public Component getListCellRendererComponent(JList list, Object client,
 			int index, boolean isSelected, boolean hasFocus) {
 
+		//make it easier to see separations
 		if (index % 2 == 0) {
 			setBackground(Color.WHITE);
 		} else {

@@ -29,6 +29,13 @@ import javax.swing.WindowConstants;
 import utilities.Client;
 import utilities.Invoice;
 
+/**
+ * Gets all Invoices belonging to the search term by date, then by invoice
+ * number
+ * 
+ * @author Andres
+ * 
+ */
 public class DateSearchScreen extends JFrame {
 
 	public static final String TITLE = "Search By Date";
@@ -65,7 +72,7 @@ public class DateSearchScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveLastState(Invoice.NextInvoiceNumber);
+						dbc.saveLastState();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -170,7 +177,7 @@ public class DateSearchScreen extends JFrame {
 
 		add(topLevelCont);
 
-		pack();
+		// pack();
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setSize(700, 450);
@@ -235,7 +242,7 @@ public class DateSearchScreen extends JFrame {
 		UIManager UI = new UIManager();
 		UI.put("OptionPane.background", new Color(129, 159, 252));
 		UI.put("Panel.background", new Color(129, 159, 252));
-		
+
 		JTextField searchField = new JTextField("");
 
 		int newCustomer = JOptionPane.showConfirmDialog(this,

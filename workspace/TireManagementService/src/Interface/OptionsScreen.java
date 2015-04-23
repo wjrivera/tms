@@ -20,8 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import utilities.Invoice;
-
 public class OptionsScreen extends JFrame {
 
 	private static final String TITLE = "Options";
@@ -47,7 +45,7 @@ public class OptionsScreen extends JFrame {
 						JOptionPane.QUESTION_MESSAGE, null, null, null);
 				if (confirm == 0) {
 					try {
-						dbc.saveLastState(Invoice.NextInvoiceNumber);
+						dbc.saveLastState();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

@@ -112,4 +112,8 @@ public class Client {
 		this.vehicle = vehicle;
 	}
 
+	public void addVehicle(Vehicle v) {
+		vehicle.add(v);
+	}
+
 }
