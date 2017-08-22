@@ -1,0 +1,276 @@
+//This Class is to edit the Store Information
+//It needs access to the database
+//Please modify as soon as possible
+//This is a message from Eclipse
+package Interface;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
+
+import utilities.StoreInfo;
+
+/**
+ * Class used to edit the store info, all the data is stored locally
+ * 
+ * @author Andres
+ * 
+ */
+public class EditStoreInfo extends JFrame {
+
+	private static final String TITLE = "Edit Store Information";
+
+	DatabaseConnectivity dbc;
+	JButton backToMainButton, applyButton;
+	JTextField companyTextField, addressTextField, cityTextField,
+			stateTextField, zipTextField, phoneTextField, faxTextField,
+			emailTextField, countyTextField, taxTextField;
+
+	public EditStoreInfo() {
+
+		try {
+			dbc = DatabaseConnectivity.getInstance();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		GridLayout gridLayout = new GridLayout(0, 4);
+
+		// set up the panels
+		JPanel buttonsPanel = new JPanel();
+		JPanel titleAndButtonCont = new JPanel();
+		JPanel topContainer = new JPanel();
+		JPanel botButtonsPanel = new JPanel();
+		JPanel topLevelCont = new JPanel();
+		JPanel panel = new JPanel(gridLayout);
+
+		buttonsPanel.setBackground(new Color(129, 159, 252));
+		titleAndButtonCont.setBackground(new Color(129, 159, 252));
+		topContainer.setBackground(new Color(129, 159, 252));
+		botButtonsPanel.setBackground(new Color(129, 159, 252));
+		topLevelCont.setBackground(new Color(129, 159, 252));
+		panel.setBackground(new Color(129, 159, 252));
+
+		// buttonsPanel.setBackground(new Color(240, 250, 240));
+		// titleAndButtonCont.setBackground(new Color(0, 250, 240));
+		// topContainer.setBackground(new Color(240, 0, 240));
+		// botButtonsPanel.setBackground(new Color(240, 250, 0));
+		// topLevelCont.setBackground(new Color(0, 255, 0));
+
+		// set the layouts
+		buttonsPanel.setLayout(new GridLayout(1, 3, 15, 15));
+		titleAndButtonCont.setLayout(new GridLayout(2, 1, 15, 15));
+		topContainer.setLayout(new BorderLayout());
+		botButtonsPanel.setLayout(new GridLayout(2, 2, 15, 15));
+		topLevelCont.setLayout(new GridLayout(2, 1));
+
+		// set the buttons and labels
+		backToMainButton = new JButton("Back To Main Screen");
+		backToMainButton.setBackground(new Color(59, 89, 182));
+		backToMainButton.setForeground(Color.WHITE);
+		backToMainButton
+				.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+
+		applyButton = new JButton("Apply Information");
+		applyButton.setBackground(new Color(59, 89, 182));
+		applyButton.setForeground(Color.WHITE);
+		applyButton.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+
+		JLabel titleLabel = new JLabel(TITLE, SwingConstants.CENTER);
+		titleLabel.setFont(new Font("Comic Sans MS Bold", Font.BOLD, 20));
+
+		JLabel companyLabel = new JLabel("     Company Name: ");
+		companyLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		companyLabel.setBackground(new Color(59, 89, 182));
+		companyLabel.setForeground(Color.BLACK);
+		companyTextField = new JTextField(StoreInfo.getStoreName());
+
+		JLabel addressLabel = new JLabel("     Address: ");
+		addressLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		addressLabel.setBackground(new Color(59, 89, 182));
+		addressLabel.setForeground(Color.BLACK);
+		addressTextField = new JTextField(StoreInfo.getAddress());
+
+		JLabel cityLabel = new JLabel("     City: ");
+		cityLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		cityLabel.setBackground(new Color(59, 89, 182));
+		cityLabel.setForeground(Color.BLACK);
+		cityTextField = new JTextField(StoreInfo.getCity());
+
+		JLabel stateLabel = new JLabel("     State: ");
+		stateLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		stateLabel.setBackground(new Color(59, 89, 182));
+		stateLabel.setForeground(Color.BLACK);
+		stateTextField = new JTextField(StoreInfo.getState());
+
+		JLabel zipLabel = new JLabel("     Zip Code: ");
+		zipLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		zipLabel.setBackground(new Color(59, 89, 182));
+		zipLabel.setForeground(Color.BLACK);
+		zipTextField = new JTextField(StoreInfo.getZip());
+
+		JLabel phoneLabel = new JLabel("     Phone Number: ");
+		phoneLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		phoneLabel.setBackground(new Color(59, 89, 182));
+		phoneLabel.setForeground(Color.BLACK);
+		phoneTextField = new JTextField(StoreInfo.getPhoneNumber());
+
+		JLabel faxLabel = new JLabel("     Fax Number: ");
+		faxLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		faxLabel.setBackground(new Color(59, 89, 182));
+		faxLabel.setForeground(Color.BLACK);
+		faxTextField = new JTextField(StoreInfo.getFaxNumber());
+
+		JLabel emailLabel = new JLabel("     Email Address: ");
+		emailLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		emailLabel.setBackground(new Color(59, 89, 182));
+		emailLabel.setForeground(Color.BLACK);
+		emailTextField = new JTextField(StoreInfo.getEmail());
+
+		JLabel countyLabel = new JLabel("     County: ");
+		countyLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		countyLabel.setBackground(new Color(59, 89, 182));
+		countyLabel.setForeground(Color.BLACK);
+		countyTextField = new JTextField(StoreInfo.getCounty());
+
+		JLabel taxLabel = new JLabel("     Tax ID#: ");
+		taxLabel.setFont(new Font("Comic Sans MS Bold", Font.PLAIN, 14));
+		taxLabel.setBackground(new Color(59, 89, 182));
+		taxLabel.setForeground(Color.BLACK);
+		taxTextField = new JTextField(StoreInfo.getTaxId());
+
+		// adding the listeners
+		backToMainButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				backToMain();
+			}
+		});
+
+		applyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				options();
+			}
+
+		});
+
+		// Add buttons and labels to panels
+		panel.add(companyLabel, BorderLayout.WEST);
+		panel.add(companyTextField, BorderLayout.CENTER);
+		panel.add(phoneLabel, BorderLayout.WEST);
+		panel.add(phoneTextField, BorderLayout.EAST);
+
+		panel.add(addressLabel, BorderLayout.WEST);
+		panel.add(addressTextField, BorderLayout.EAST);
+		panel.add(faxLabel, BorderLayout.WEST);
+		panel.add(faxTextField, BorderLayout.EAST);
+
+		panel.add(cityLabel, BorderLayout.WEST);
+		panel.add(cityTextField, BorderLayout.EAST);
+		panel.add(emailLabel, BorderLayout.WEST);
+		panel.add(emailTextField, BorderLayout.EAST);
+
+		panel.add(stateLabel, BorderLayout.WEST);
+		panel.add(stateTextField, BorderLayout.EAST);
+		panel.add(countyLabel, BorderLayout.WEST);
+		panel.add(countyTextField, BorderLayout.EAST);
+
+		panel.add(zipLabel, BorderLayout.WEST);
+		panel.add(zipTextField, BorderLayout.CENTER);
+
+		panel.add(taxLabel, BorderLayout.WEST);
+		panel.add(taxTextField, BorderLayout.EAST);
+		titleAndButtonCont.add(titleLabel); // adding title label to top panel
+		titleAndButtonCont.add(buttonsPanel); // adding buttonsPanel to top
+												// panel
+		JPanel empty1 = new JPanel();
+		JPanel empty2 = new JPanel();
+		empty1.setBackground(new Color(129, 159, 252));
+		empty2.setBackground(new Color(129, 159, 252));
+		buttonsPanel.add(empty1);
+		buttonsPanel.add(backToMainButton);
+		buttonsPanel.add(empty2);
+
+		topContainer.add(new JLabel(" "), BorderLayout.PAGE_START);
+		topContainer.add(new JLabel("      "), BorderLayout.LINE_START);
+		topContainer.add(new JLabel("      "), BorderLayout.LINE_END);
+		topContainer.add(new JLabel(" "), BorderLayout.PAGE_END);
+		topContainer.add(titleAndButtonCont, BorderLayout.CENTER);
+
+		botButtonsPanel.add(panel);
+		botButtonsPanel.add(applyButton, BorderLayout.SOUTH);
+
+		// Adding the top container and bottom container
+		topLevelCont.add(topContainer);
+		topLevelCont.add(botButtonsPanel);
+		add(topLevelCont);
+
+		// Setting the main panel
+		setResizable(false);
+		setSize(700, 450);
+		// setSize(1400, 900);
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+
+	public void backToMain() {
+		// close the current window()
+		try {
+			StartScreen back = new StartScreen();
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setVisible(false);
+		dispose();
+	}
+
+	public void options() {
+		try {
+			// Sets store information
+			OptionsScreen newInstance = new OptionsScreen();
+			StoreInfo.setStoreName(companyTextField.getText());
+			StoreInfo.setAddress(addressTextField.getText());
+			StoreInfo.setCity(cityTextField.getText());
+			StoreInfo.setState(stateTextField.getText());
+			StoreInfo.setZip(zipTextField.getText());
+			StoreInfo.setPhoneNumber(phoneTextField.getText());
+			StoreInfo.setFaxNumber(faxTextField.getText());
+			StoreInfo.setEmail(emailTextField.getText());
+			StoreInfo.setCounty(countyTextField.getText());
+			StoreInfo.setTaxId(taxTextField.getText());
+			//Displays store info
+			StoreInfo.printInfo();
+
+			try {
+				dbc.saveLastState();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setVisible(false);
+		dispose();
+	}
+
+}

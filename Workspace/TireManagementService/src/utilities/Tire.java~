@@ -1,7 +1,7 @@
 package utilities;
 
 /**
- * Created by Jason on 2/24/15.
+ * Created by jay on 2/24/15.
  * Edited by Andres on 4/11/15
  */
 public class Tire {
@@ -14,7 +14,7 @@ public class Tire {
 	double price;
 
 	public Tire() {
-		System.out.println("Please enter a tire size next time");
+		System.out.println("Please enter a tire size");
 	}
 
 	public Tire(String tireSize) {
@@ -26,7 +26,7 @@ public class Tire {
 		}
 
 	}
-	// Class parses a full string to separate numbers as long as there entered in the specific format
+
 	public void parseIntoSpecificSizes(String tireSize) {
 		StringBuffer sb = new StringBuffer();
 		for (int j = 0; j < 3; j++) {
@@ -60,7 +60,7 @@ public class Tire {
 			}
 		}
 	}
-	//Checks string for non valid characters
+
 	public boolean checkNumber(String x) {
 		if (x.matches("^[0-9]+$")) {
 			return true;
@@ -68,8 +68,7 @@ public class Tire {
 
 		return false;
 	}
-	
-	//Setters and getters below.
+
 	public void setHeight(double h) {
 		height = h;
 	}

@@ -1,11 +1,16 @@
-Team TMS
-Tire Management System
-This will be our main repositories for our program. Thank you
+			Team TMS
+		Tire Management System
 
-This file is supposed to contain the main information about our program
+Purpose
+------------------------------------------------------------------------
+Point-Of-Sale and invertory prototype system
 
+Documentation
+------------------------------------------------------------------------
+Please see the Documentation folder for User Guide, Presentation and Final Draft
 
-Member:
+Authors
+------------------------------------------------------------------------
 Andres Acuna
 Christian Thomas
 Jason Ricardo
